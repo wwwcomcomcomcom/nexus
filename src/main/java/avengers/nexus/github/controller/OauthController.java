@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/oauth")
 public class OauthController {
     @Autowired
-    OauthService oauthService;
+    private OauthService oauthService;
     @GetMapping("/login")
     public String getAccessToken(@RequestParam String accessCode, HttpServletRequest httpServletRequest){
         String accessToken = oauthService.getAccessToken(accessCode);
