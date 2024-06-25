@@ -1,4 +1,4 @@
-package avengers.nexus.shared.entity;
+package avengers.nexus.user.entity;
 
 import avengers.nexus.utils.StringListConverter;
 import jakarta.persistence.*;
