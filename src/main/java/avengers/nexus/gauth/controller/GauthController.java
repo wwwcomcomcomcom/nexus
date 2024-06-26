@@ -12,8 +12,9 @@ public class GauthController {
         this.gauthService = gauthService;
     }
 
-    @PostMapping("/token")
+    @PostMapping("/login")
     public ResponseEntity<?> getAccessToken(String authorizationCode) {
+
         return ResponseEntity.ok(gauthService.getAccessToken(authorizationCode));
     }
 }
