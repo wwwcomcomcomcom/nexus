@@ -1,6 +1,7 @@
 package avengers.nexus.gauth.controller;
 
 import avengers.nexus.gauth.service.GauthService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +14,8 @@ public class GauthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginAndRegisterTokenAtSession(String authorizationCode) {
-
-        return ResponseEntity.ok(gauthService.getAccessToken(authorizationCode));
+    public ResponseEntity<?> loginAndRegisterTokenAtSession(String authorizationCode, HttpServletRequest request) {
+        request.getSession().setAttribute("gauthToken", gauthService.getAccessToken(authorizationCode));
+        return ResponseEntity.ok("Logged in with Gauth account!");
     }
 }
