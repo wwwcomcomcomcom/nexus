@@ -2,6 +2,7 @@ package avengers.nexus.user.controller;
 
 import avengers.nexus.gauth.service.GauthService;
 import avengers.nexus.user.dto.UserSignupDto;
+import avengers.nexus.user.entity.User;
 import avengers.nexus.user.service.UserService;
 import dev.yangsijun.gauth.core.GAuthAuthenticationException;
 import dev.yangsijun.gauth.core.user.GAuthUser;
@@ -9,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,8 +34,11 @@ public class UserController {
         userService.registerUser(user);
         return "User signed up!";
     }
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserSignupDto user, HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    @PostMapping("/login/github")
+    public ResponseEntity<?> login(@RequestParam String accessCode, HttpServletRequest request) {
+        User user = userService.loginWithGithub(accessCode);
+        request.getSession().invalidate();
+        request.getSession().setAttribute("user", user);
+        return ResponseEntity.ok("User logged in!");
     }
 }
