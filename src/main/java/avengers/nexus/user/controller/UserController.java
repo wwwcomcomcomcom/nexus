@@ -41,4 +41,11 @@ public class UserController {
         request.getSession().setAttribute("user", user);
         return ResponseEntity.ok("User logged in!");
     }
+    @PostMapping("/login/gauth")
+    public ResponseEntity<?> loginGauth(@RequestParam String accessCode, HttpServletRequest request) {
+        User user = userService.loginWithGauth(accessCode);
+        request.getSession().invalidate();
+        request.getSession().setAttribute("user", user);
+        return ResponseEntity.ok("User logged in!");
+    }
 }
