@@ -23,6 +23,7 @@ public class UserController {
         this.gauthService = gauthService;
     }
     @PostMapping("/signup")
+    //signup with gauth
     public String signup(@RequestParam String accessCode) {
         GAuthUser gauthUser;
         try{
@@ -35,14 +36,14 @@ public class UserController {
         return "User signed up!";
     }
     @PostMapping("/login/github")
-    public ResponseEntity<?> login(@RequestParam String accessCode, HttpServletRequest request) {
+    public ResponseEntity<?> loginWithGithub(@RequestParam String accessCode, HttpServletRequest request) {
         User user = userService.loginWithGithub(accessCode);
         request.getSession().invalidate();
         request.getSession().setAttribute("user", user);
         return ResponseEntity.ok("User logged in!");
     }
     @PostMapping("/login/gauth")
-    public ResponseEntity<?> loginGauth(@RequestParam String accessCode, HttpServletRequest request) {
+    public ResponseEntity<?> loginWithGauth(@RequestParam String accessCode, HttpServletRequest request) {
         User user = userService.loginWithGauth(accessCode);
         request.getSession().invalidate();
         request.getSession().setAttribute("user", user);
