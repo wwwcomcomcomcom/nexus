@@ -1,5 +1,6 @@
 package avengers.nexus.github.service;
 
+import avengers.nexus.github.domain.GithubUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -8,9 +9,9 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class OauthService {
@@ -35,7 +36,7 @@ public class OauthService {
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
 
-        ResponseEntity<Map<String, String>> response = restTemplate.exchange(url, HttpMethod.POST, request, new ParameterizedTypeReference<Map<String, String>>() {});
+        ResponseEntity<Map<String, String>> response = restTemplate.exchange(url, HttpMethod.POST, request, new ParameterizedTypeReference<>() {});
 
         if (response.getStatusCode() == HttpStatus.OK) {
             Map<String, String> responseBody = response.getBody();
@@ -44,5 +45,28 @@ public class OauthService {
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,"Failed to retrieve access token");
         }
+    }
+    public GithubUser getGithubUserByToken(String token) {
+        String url = "https://api.github.com/user";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "token " + token);
+
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        ResponseEntity<GithubUser> response;
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, request, GithubUser.class);
+        } catch (HttpStatusCodeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to retrieve user info from github" + e.getMessage());
+        }
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to retrieve user info from github");
+        }
+        GithubUser githubUser = Optional.ofNullable(response.getBody()).orElseThrow(()->
+                new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to retrieve user info from github"));
+        githubUser.setToken(token);
+        return githubUser;
     }
 }
