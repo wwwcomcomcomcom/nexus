@@ -36,7 +36,6 @@ public class UserController {
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserSignupDto user, HttpServletRequest request) {
-        userService.login(user.getName(), user.getPassword());
-        return ResponseEntity.ok("User logged in!");
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }
