@@ -38,10 +38,6 @@ public class UserService {
                 .build();
         userRepository.save(user);
     }
-    public User login(String name, String password) {
-        //TODO: separate login logic github vs gauth
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
     public User loginWithGithub(String accessCode) {
         String token = oauthService.getAccessToken(accessCode);
         GithubUser user = oauthService.getGithubUserByToken(token);
