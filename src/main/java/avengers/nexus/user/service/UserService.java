@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -43,7 +42,8 @@ public class UserService {
         //TODO: separate login logic github vs gauth
         throw new UnsupportedOperationException("Not implemented yet");
     }
-    public User loginWithGithub(String token) {
+    public User loginWithGithub(String accessCode) {
+        String token = oauthService.getAccessToken(accessCode);
         GithubUser user = oauthService.getGithubUserByToken(token);
         return userRepository.findByGithubId(user.getId()).orElseThrow(()->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
