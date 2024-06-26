@@ -1,5 +1,11 @@
 package avengers.nexus.gauth.service;
 
+import dev.yangsijun.gauth.core.GAuthAuthenticationException;
+import dev.yangsijun.gauth.core.user.GAuthUser;
+import dev.yangsijun.gauth.registration.GAuthRegistration;
+import dev.yangsijun.gauth.userinfo.DefaultGAuthUserService;
+import dev.yangsijun.gauth.userinfo.GAuthAuthorizationRequest;
+import dev.yangsijun.gauth.userinfo.GAuthUserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -18,7 +24,12 @@ public class GauthService {
     @Value("${gauth.security.client-secret}")
     private String clientSecret;
 
+    private final GAuthRegistration defaultRegistration = new GAuthRegistration(clientId, clientSecret,"https://localhost:8080/gauth/login");
+
     private final RestTemplate restTemplate;
+
+    private GAuthUserService<GAuthAuthorizationRequest, GAuthUser> defaultUserService = new DefaultGAuthUserService();
+
     public GauthService(RestTemplate restTemplate){
         this.restTemplate = restTemplate;
     }
@@ -45,5 +56,10 @@ public class GauthService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,"Failed to retrieve access token from gauth");
         }
+    }
+
+    public GAuthUser getUserByAccessCode(String accessCode) throws GAuthAuthenticationException {
+        GAuthAuthorizationRequest userRequest = new GAuthAuthorizationRequest(accessCode, defaultRegistration);
+        return defaultUserService.loadUser(userRequest);
     }
 }
