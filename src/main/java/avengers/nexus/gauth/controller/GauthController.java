@@ -13,7 +13,7 @@ public class GauthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> getAccessToken(String authorizationCode) {
+    public ResponseEntity<?> loginAndRegisterTokenAtSession(String authorizationCode) {
 
         return ResponseEntity.ok(gauthService.getAccessToken(authorizationCode));
     }
