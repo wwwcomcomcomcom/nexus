@@ -7,5 +7,4 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserSignupDto {
     private String name;
-    private String password;
 }

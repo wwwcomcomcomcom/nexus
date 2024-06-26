@@ -19,7 +19,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String password;
 
     @Convert(converter = StringListConverter.class)
     private List<String> followers;
