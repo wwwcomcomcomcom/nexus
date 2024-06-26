@@ -33,4 +33,9 @@ public class UserService {
                 .build();
         userRepository.save(user);
     }
+    public User login(String name, String password) {
+        return userRepository.findByNameAndPassword(name, password).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login failed")
+        );
+    }
 }
