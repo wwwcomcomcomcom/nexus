@@ -29,7 +29,6 @@ public class UserService {
     public void registerUser(UserSignupDto userSignupDto) {
         User user = User.builder()
                 .name(userSignupDto.getName())
-                .password(userSignupDto.getPassword())
                 .build();
         userRepository.save(user);
     }
