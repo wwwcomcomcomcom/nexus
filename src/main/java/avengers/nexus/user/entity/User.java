@@ -18,7 +18,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //gauth name
     private String name;
+    //Not a nickname or a login but the github pk id   @Nullable
+    private Long githubId;
 
     @Convert(converter = StringListConverter.class)
     private List<String> followers;
