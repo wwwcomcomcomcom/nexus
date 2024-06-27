@@ -9,6 +9,7 @@ import dev.yangsijun.gauth.core.user.GAuthUser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,5 +49,11 @@ public class UserController {
         request.getSession().invalidate();
         request.getSession().setAttribute("user", user);
         return ResponseEntity.ok("User logged in!");
+    }
+    @GetMapping("/info")
+    public ResponseEntity<User> getUserInfo(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if(user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
+        return ResponseEntity.ok(user);
     }
 }
