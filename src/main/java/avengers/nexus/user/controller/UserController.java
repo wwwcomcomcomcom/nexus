@@ -24,7 +24,7 @@ public class UserController {
     }
     @PostMapping("/signup")
     //signup with gauth
-    public String signup(@RequestParam String accessCode) {
+    public ResponseEntity<String> signup(@RequestParam String accessCode) {
         GAuthUser gauthUser;
         try{
             gauthUser = gauthService.getUserByAccessCode(accessCode);
@@ -33,17 +33,17 @@ public class UserController {
         }
         UserSignupDto user = new UserSignupDto(gauthUser.getName());
         userService.registerUser(user);
-        return "User signed up!";
+        return ResponseEntity.ok("User signed up!");
     }
     @PostMapping("/login/github")
-    public ResponseEntity<?> loginWithGithub(@RequestParam String accessCode, HttpServletRequest request) {
+    public ResponseEntity<String> loginWithGithub(@RequestParam String accessCode, HttpServletRequest request) {
         User user = userService.loginWithGithub(accessCode);
         request.getSession().invalidate();
         request.getSession().setAttribute("user", user);
         return ResponseEntity.ok("User logged in!");
     }
     @PostMapping("/login/gauth")
-    public ResponseEntity<?> loginWithGauth(@RequestParam String accessCode, HttpServletRequest request) {
+    public ResponseEntity<String> loginWithGauth(@RequestParam String accessCode, HttpServletRequest request) {
         User user = userService.loginWithGauth(accessCode);
         request.getSession().invalidate();
         request.getSession().setAttribute("user", user);
