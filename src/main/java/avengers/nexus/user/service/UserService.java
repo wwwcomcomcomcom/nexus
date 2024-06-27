@@ -37,6 +37,7 @@ public class UserService {
     public void registerUser(UserSignupDto userSignupDto) {
         User user = User.builder()
                 .name(userSignupDto.getName())
+                .profileImageUrl(userSignupDto.getProfileImageUrl())
                 .build();
         userRepository.save(user);
     }

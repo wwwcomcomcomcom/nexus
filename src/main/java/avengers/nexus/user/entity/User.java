@@ -20,6 +20,8 @@ public class User {
     private Long id;
     //gauth name
     private String name;
+    //basically gauth profile image url  @Nullable
+    private String profileImageUrl;
     //Not a nickname or a login but the github pk id   @Nullable
     private Long githubId;
 

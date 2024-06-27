@@ -31,7 +31,7 @@ public class UserController {
         } catch (GAuthAuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to retrieve user info from gauth" + e.getMessage());
         }
-        UserSignupDto user = new UserSignupDto(gauthUser.getName());
+        UserSignupDto user = new UserSignupDto(gauthUser.getName(),gauthUser.getAttribute("profileUrl"));
         userService.registerUser(user);
         return ResponseEntity.ok("User signed up!");
     }
