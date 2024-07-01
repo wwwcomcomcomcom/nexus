@@ -4,18 +4,15 @@ import avengers.nexus.gauth.service.GauthService;
 import avengers.nexus.user.dto.UserSignupDto;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.service.UserService;
-import dev.yangsijun.gauth.core.GAuthAuthenticationException;
-import dev.yangsijun.gauth.core.user.GAuthUser;
+import gauth.GAuthUserInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-@RestController("/user")
+@RestController
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
     private final GauthService gauthService;
@@ -26,13 +23,9 @@ public class UserController {
     @PostMapping("/signup")
     //signup with gauth
     public ResponseEntity<String> signup(@RequestParam String accessCode) {
-        GAuthUser gauthUser;
-        try{
-            gauthUser = gauthService.getUserByAccessCode(accessCode);
-        } catch (GAuthAuthenticationException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to retrieve user info from gauth" + e.getMessage());
-        }
-        UserSignupDto user = new UserSignupDto(gauthUser.getName(),gauthUser.getAttribute("profileUrl"));
+        GAuthUserInfo gauthUser = gauthService.getUserInfoByCode(accessCode);
+        //user profile is Nullable
+        UserSignupDto user = new UserSignupDto(gauthUser.getName(),gauthUser.getProfileUrl());
         userService.registerUser(user);
         return ResponseEntity.ok("User signed up!");
     }
