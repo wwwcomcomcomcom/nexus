@@ -7,6 +7,7 @@ import avengers.nexus.user.dto.UserSignupDto;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.repository.TokenMemoryRepository;
 import avengers.nexus.user.repository.UserRepository;
+import gauth.GAuthUserInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class UserService {
         return user;
     }
     public User loginWithGauth(String accessCode) {
-        GAuthUser gauthUser = gauthService.getUserByAccessCode(accessCode);
+        GAuthUserInfo gauthUser = gauthService.getUserInfoByCode(accessCode);
         return userRepository.findByName(gauthUser.getName()).orElseThrow(()->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         );
