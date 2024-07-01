@@ -23,7 +23,7 @@ public class GauthService {
                 authorizationCode,
                 clientId,
                 clientSecret,
-                "http://localhost:5173/login"
+                "http://localhost:5173"
         );
         return token.getAccessToken();
     }
