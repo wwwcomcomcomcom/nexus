@@ -6,6 +6,7 @@ import avengers.nexus.user.entity.User;
 import avengers.nexus.user.service.UserService;
 import gauth.GAuthUserInfo;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,16 +33,20 @@ public class UserController {
     @PostMapping("/login/github")
     public ResponseEntity<String> loginWithGithub(@RequestParam String accessCode, HttpServletRequest request) {
         User user = userService.loginWithGithub(accessCode);
-        request.getSession().invalidate();
-        request.getSession().setAttribute("user", user);
+        issueSession(user, request);
         return ResponseEntity.ok("User logged in!");
     }
     @PostMapping("/login/gauth")
     public ResponseEntity<String> loginWithGauth(@RequestParam String accessCode, HttpServletRequest request) {
         User user = userService.loginWithGauth(accessCode);
-        request.getSession().invalidate();
-        request.getSession().setAttribute("user", user);
+        issueSession(user, request);
         return ResponseEntity.ok("User logged in!");
+    }
+    private void issueSession(User user, HttpServletRequest request) {
+        request.getSession().invalidate();
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+        session.setMaxInactiveInterval(86400);
     }
     @GetMapping("/info")
     public ResponseEntity<User> getUserInfo(HttpServletRequest request) {
