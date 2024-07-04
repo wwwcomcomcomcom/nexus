@@ -1,10 +1,9 @@
 package avengers.nexus.user.entity;
 
-import avengers.nexus.utils.StringListConverter;
+import avengers.nexus.utils.LongListConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,12 +24,8 @@ public class User {
     //Not a nickname or a login but the github pk id   @Nullable
     private Long githubId;
 
-    @Convert(converter = StringListConverter.class)
-    private List<String> followers;
-    @Convert(converter = StringListConverter.class)
-    private List<String> followings;
-
-    public static UserBuilder builder() {
-        return new UserBuilder().followers(new ArrayList<>()).followings(new ArrayList<>());
-    }
+    @Convert(converter = LongListConverter.class)
+    private List<Long> followers = List.of();
+    @Convert(converter = LongListConverter.class)
+    private List<Long> followings = List.of();
 }
