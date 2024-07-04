@@ -7,12 +7,14 @@ import jakarta.persistence.Converter;
 
 import java.util.List;
 
+interface LongList extends List<Long> {}
+
 @Converter
-public class StringListConverter implements AttributeConverter<List<String>,String> {
+public class LongListConverter implements AttributeConverter<List<Long>,String> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(List<String> dataList){
+    public String convertToDatabaseColumn(List<Long> dataList){
         try {
             return objectMapper.writeValueAsString(dataList);
         }catch (JsonProcessingException e){
@@ -21,9 +23,9 @@ public class StringListConverter implements AttributeConverter<List<String>,Stri
     }
 
     @Override
-    public List<String> convertToEntityAttribute(String data) {
+    public List<Long> convertToEntityAttribute(String data) {
         try {
-            return objectMapper.readValue(data, List.class);
+            return objectMapper.readValue(data,LongList.class);
         }catch (JsonProcessingException e){
             throw new RuntimeException(e);
         }
