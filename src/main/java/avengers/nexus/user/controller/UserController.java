@@ -48,6 +48,11 @@ public class UserController {
         session.setAttribute("user", user);
         session.setMaxInactiveInterval(86400);
     }
+    @DeleteMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        return ResponseEntity.ok("User logged out!");
+    }
     @GetMapping("/info")
     public ResponseEntity<User> getUserInfo(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
