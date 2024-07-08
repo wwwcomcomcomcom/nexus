@@ -7,8 +7,6 @@ import jakarta.persistence.Converter;
 
 import java.util.List;
 
-interface LongList extends List<Long> {}
-
 @Converter
 public class LongListConverter implements AttributeConverter<List<Long>,String> {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -25,7 +23,7 @@ public class LongListConverter implements AttributeConverter<List<Long>,String> 
     @Override
     public List<Long> convertToEntityAttribute(String data) {
         try {
-            return objectMapper.readValue(data,LongList.class);
+            return objectMapper.readValue(data,List.class);
         }catch (JsonProcessingException e){
             throw new RuntimeException(e);
         }
