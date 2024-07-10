@@ -1,5 +1,6 @@
 package avengers.nexus.github.service;
 
+import avengers.nexus.authentication.service.AuthenticateService;
 import avengers.nexus.github.domain.GithubUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class GithubService {
+public class GithubService implements AuthenticateService {
     @Value("${github.client-id}")
     private String clientId;
     @Value("${github.client-secret}")
