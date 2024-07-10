@@ -14,13 +14,13 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class OauthService {
+public class GithubService {
     @Value("${github.client-id}")
     private String clientId;
     @Value("${github.client-secret}")
     private String clientSecret;
     private final RestTemplate restTemplate;
-    public OauthService(RestTemplate restTemplate){
+    public GithubService(RestTemplate restTemplate){
         this.restTemplate = restTemplate;
     }
     public String getAccessToken(String authorizationCode) {
