@@ -1,5 +1,6 @@
-package avengers.nexus.authentication;
+package avengers.nexus.authentication.filter;
 
+import avengers.nexus.authentication.jwt.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,15 +16,15 @@ import java.io.IOException;
 
 public class OauthAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final JwtTokenProvider tokenProvider;
+    private final JWTUtil jwtUtil;
     private final ExternalAuthenticationService externalAuthService;
 
     public OauthAuthenticationFilter(String url, AuthenticationManager authManager,
-                                   JwtTokenProvider tokenProvider,
+                                   JWTUtil jwtUtil,
                                    ExternalAuthenticationService externalAuthService) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
-        this.tokenProvider = tokenProvider;
+        this.jwtUtil = jwtUtil;
         this.externalAuthService = externalAuthService;
     }
 
@@ -31,13 +32,13 @@ public class OauthAuthenticationFilter extends AbstractAuthenticationProcessingF
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response)
             throws AuthenticationException, IOException {
-        String token = request.getReader().lines().reduce("", String::concat);
+        String accessCode = request.getReader().lines().reduce("", String::concat);
 
-        boolean isAuthenticated = externalAuthService.authenticate(token);
+        boolean isAuthenticated = externalAuthService.authenticate(accessCode);
 
         if (isAuthenticated) {
             return getAuthenticationManager().authenticate(
-                    new UsernamePasswordAuthenticationToken(token, token)
+                    new UsernamePasswordAuthenticationToken(accessCode, accessCode)
             );
         } else {
             throw new AuthenticationException("Authentication failed") {};
@@ -50,7 +51,7 @@ public class OauthAuthenticationFilter extends AbstractAuthenticationProcessingF
                                             FilterChain chain,
                                             Authentication authResult)
             throws IOException, ServletException {
-        String jwt = tokenProvider.createToken(authResult);
+        String jwt = jwtUtil.createJwt(authResult);
         response.addHeader("Authorization", "Bearer " + jwt);
     }
 }
