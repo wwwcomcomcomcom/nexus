@@ -2,6 +2,8 @@ package avengers.nexus.gauth.service;
 
 
 import avengers.nexus.authentication.service.AuthenticateService;
+import avengers.nexus.user.entity.User;
+import avengers.nexus.user.service.UserService;
 import gauth.GAuth;
 import gauth.GAuthToken;
 import gauth.GAuthUserInfo;
@@ -18,6 +20,7 @@ public class GauthService implements AuthenticateService {
     private String clientSecret;
 
     private final GAuth gAuth;
+    private final UserService userService;
 
     public String getAccessToken(String authorizationCode) {
         GAuthToken token = gAuth.generateToken(
@@ -34,5 +37,11 @@ public class GauthService implements AuthenticateService {
     }
     public GAuthUserInfo getUserInfo(String accessToken) {
         return gAuth.getUserInfo(accessToken);
+    }
+
+    @Override
+    public User findUserByAccessCode(String code) {
+        GAuthUserInfo userInfo = getUserInfoByCode(code);
+        return userService.getUserByName(userInfo.getName());
     }
 }
