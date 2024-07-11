@@ -66,7 +66,7 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(gauthAuthenticationFilter(http.getSharedObject(AuthenticationManager.class)), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(githubAuthenticationFilter(http.getSharedObject(AuthenticationManager.class)), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(githubAuthenticationFilter(http.getSharedObject(AuthenticationManager.class)), GauthAuthenticationFilter.class)
         ;
         return http.build();
     }
