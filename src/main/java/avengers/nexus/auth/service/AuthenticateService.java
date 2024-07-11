@@ -1,4 +1,4 @@
-package avengers.nexus.authentication.service;
+package avengers.nexus.auth.service;
 
 
 public interface AuthenticateService {

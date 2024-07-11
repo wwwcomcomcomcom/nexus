@@ -1,8 +1,8 @@
-package avengers.nexus.authentication.config;
+package avengers.nexus.auth.config;
 
-import avengers.nexus.authentication.filter.GauthAuthenticationFilter;
-import avengers.nexus.authentication.filter.GithubAuthenticationFilter;
-import avengers.nexus.authentication.jwt.JWTUtil;
+import avengers.nexus.auth.filter.GauthAuthenticationFilter;
+import avengers.nexus.auth.filter.GithubAuthenticationFilter;
+import avengers.nexus.auth.jwt.JWTUtil;
 import avengers.nexus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

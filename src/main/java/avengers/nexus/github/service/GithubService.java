@@ -1,9 +1,7 @@
 package avengers.nexus.github.service;
 
-import avengers.nexus.authentication.service.AuthenticateService;
+import avengers.nexus.auth.service.AuthenticateService;
 import avengers.nexus.github.domain.GithubUser;
-import avengers.nexus.user.entity.User;
-import avengers.nexus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;

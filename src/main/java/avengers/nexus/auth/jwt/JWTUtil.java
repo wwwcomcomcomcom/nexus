@@ -1,4 +1,4 @@
-package avengers.nexus.authentication.jwt;
+package avengers.nexus.auth.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

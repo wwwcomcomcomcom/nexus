@@ -1,6 +1,6 @@
-package avengers.nexus.authentication.filter;
+package avengers.nexus.auth.filter;
 
-import avengers.nexus.authentication.jwt.JWTUtil;
+import avengers.nexus.auth.jwt.JWTUtil;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -14,13 +14,13 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.server.ResponseStatusException;
 
-public class GithubAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class GauthAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private final JWTUtil jwtUtil;
     private final UserService userService;
 
     //TODO:builder pattern
-    public GithubAuthenticationFilter(String url, AuthenticationManager authManager, JWTUtil jwtUtil, UserService userService) {
+    public GauthAuthenticationFilter(String url, AuthenticationManager authManager, JWTUtil jwtUtil, UserService userService) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
         this.jwtUtil = jwtUtil;
@@ -33,7 +33,7 @@ public class GithubAuthenticationFilter extends AbstractAuthenticationProcessing
             throws AuthenticationException {
         String accessCode = request.getParameter("accessCode");
         try {
-            User user = userService.loginWithGithub(accessCode);
+            User user = userService.loginWithGauth(accessCode);
             return new UsernamePasswordAuthenticationToken(user, user.getId());
         }catch (ResponseStatusException e){
             throw new AuthenticationException("Authentication failed by " + e.getStatusCode() + e.getMessage()) {};

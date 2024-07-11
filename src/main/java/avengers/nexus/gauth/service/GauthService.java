@@ -1,7 +1,7 @@
 package avengers.nexus.gauth.service;
 
 
-import avengers.nexus.authentication.service.AuthenticateService;
+import avengers.nexus.auth.service.AuthenticateService;
 import gauth.GAuth;
 import gauth.GAuthToken;
 import gauth.GAuthUserInfo;
