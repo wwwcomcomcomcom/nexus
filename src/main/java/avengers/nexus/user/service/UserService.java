@@ -34,6 +34,12 @@ public class UserService {
         );
     }
 
+    public User getUserByGithubId(Long githubId){
+        return userRepository.findByGithubId(githubId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        );
+    }
+
     public void registerUser(UserSignupDto userSignupDto) {
         User user = User.builder()
                 .name(userSignupDto.getName())
