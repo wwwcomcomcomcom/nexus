@@ -20,7 +20,6 @@ public class GauthService implements AuthenticateService {
     private String clientSecret;
 
     private final GAuth gAuth;
-    private final UserService userService;
 
     public String getAccessToken(String authorizationCode) {
         GAuthToken token = gAuth.generateToken(
@@ -37,11 +36,5 @@ public class GauthService implements AuthenticateService {
     }
     public GAuthUserInfo getUserInfo(String accessToken) {
         return gAuth.getUserInfo(accessToken);
-    }
-
-    @Override
-    public User findUserByAccessCode(String code) {
-        GAuthUserInfo userInfo = getUserInfoByCode(code);
-        return userService.getUserByName(userInfo.getName());
     }
 }

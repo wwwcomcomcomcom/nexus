@@ -25,7 +25,6 @@ public class GithubService implements AuthenticateService {
     @Value("${github.client-secret}")
     private String clientSecret;
     private final RestTemplate restTemplate;
-    private final UserService userService;
 
     public String getAccessToken(String authorizationCode) {
         String url = "https://github.com/login/oauth/access_token";
@@ -77,11 +76,5 @@ public class GithubService implements AuthenticateService {
     public GithubUser getGithubUserByAccessCode(String accessCode){
         String token = getAccessToken(accessCode);
         return getGithubUserByToken(token);
-    }
-
-    @Override
-    public User findUserByAccessCode(String accessCode) {
-        GithubUser githubUser = getGithubUserByAccessCode(accessCode);
-        return userService.getUserByGithubId(githubUser.getId());
     }
 }
