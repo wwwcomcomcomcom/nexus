@@ -30,12 +30,14 @@ public class UserController {
         userService.registerUser(user);
         return ResponseEntity.ok("User signed up!");
     }
+    /** @deprecated  */
     @PostMapping("/login/github")
     public ResponseEntity<String> loginWithGithub(@RequestParam String accessCode, HttpServletRequest request) {
         User user = userService.loginWithGithub(accessCode);
         issueSession(user, request);
         return ResponseEntity.ok("User logged in!");
     }
+    /** @deprecated  */
     @PostMapping("/login/gauth")
     public ResponseEntity<String> loginWithGauth(@RequestParam String accessCode, HttpServletRequest request) {
         User user = userService.loginWithGauth(accessCode);
