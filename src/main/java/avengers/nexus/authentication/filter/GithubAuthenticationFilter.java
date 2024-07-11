@@ -34,6 +34,7 @@ public class GithubAuthenticationFilter extends AbstractAuthenticationProcessing
                                                 HttpServletResponse response)
             throws AuthenticationException, IOException {
         String accessCode = request.getReader().lines().reduce("", String::concat);
+        String accessCode = request.getParameter("accessCode");
         try {
             User user = userService.loginWithGithub(accessCode);
             return getAuthenticationManager().authenticate(
