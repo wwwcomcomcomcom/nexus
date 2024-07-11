@@ -33,7 +33,7 @@ public class GauthAuthenticationFilter extends AbstractAuthenticationProcessingF
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response)
             throws AuthenticationException, IOException {
-        String accessCode = request.getReader().lines().reduce("", String::concat);
+        String accessCode = request.getParameter("accessCode");
         try {
             User user = userService.loginWithGauth(accessCode);
             return getAuthenticationManager().authenticate(
@@ -51,6 +51,7 @@ public class GauthAuthenticationFilter extends AbstractAuthenticationProcessingF
                                             Authentication authResult) {
         User user = (User) authResult.getPrincipal();
         String jwt = jwtUtil.createJwt(user.getName(), user.getId(),86400000L);
+        System.out.println("Authentication was success");
         response.addHeader("Authorization", "Bearer " + jwt);
     }
 }
