@@ -47,7 +47,6 @@ public class GauthAuthenticationFilter extends AbstractAuthenticationProcessingF
                                             Authentication authResult) {
         User user = (User) authResult.getPrincipal();
         String jwt = jwtUtil.createJwt(user.getName(), user.getId(),86400000L);
-        System.out.println("Authentication was success");
         response.addHeader("Authorization", "Bearer " + jwt);
     }
 }
