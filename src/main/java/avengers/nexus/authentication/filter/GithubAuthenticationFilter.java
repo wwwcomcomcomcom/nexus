@@ -14,8 +14,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-
 public class GithubAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private final JWTUtil jwtUtil;
