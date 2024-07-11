@@ -36,9 +36,7 @@ public class GauthAuthenticationFilter extends AbstractAuthenticationProcessingF
         String accessCode = request.getParameter("accessCode");
         try {
             User user = userService.loginWithGauth(accessCode);
-            return getAuthenticationManager().authenticate(
-                    new UsernamePasswordAuthenticationToken(user, user.getId())
-            );
+            return new UsernamePasswordAuthenticationToken(user, user.getId());
         }catch (ResponseStatusException e){
             throw new AuthenticationException("Authentication failed by " + e.getStatusCode() + e.getMessage()) {};
         }
