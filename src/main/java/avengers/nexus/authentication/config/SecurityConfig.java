@@ -1,9 +1,9 @@
 package avengers.nexus.authentication.config;
 
-import avengers.nexus.authentication.filter.OauthAuthenticationFilter;
+import avengers.nexus.authentication.filter.GauthAuthenticationFilter;
+import avengers.nexus.authentication.filter.GithubAuthenticationFilter;
 import avengers.nexus.authentication.jwt.JWTUtil;
-import avengers.nexus.gauth.service.GauthService;
-import avengers.nexus.github.service.GithubService;
+import avengers.nexus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JWTUtil jwtUtil;
-    private final GauthService gauthService;
-    private final GithubService githubService;
+    private final UserService userService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -38,14 +37,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public OauthAuthenticationFilter gauthAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-        OauthAuthenticationFilter filter = new OauthAuthenticationFilter("/login/gauth", authenticationManager, jwtUtil, gauthService);
+    public GauthAuthenticationFilter gauthAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
+        GauthAuthenticationFilter filter = new GauthAuthenticationFilter("/login/gauth", authenticationManager, jwtUtil, userService);
         filter.setFilterProcessesUrl("/login/gauth");
         return filter;
     }
     @Bean
-    public OauthAuthenticationFilter githubAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-        OauthAuthenticationFilter filter = new OauthAuthenticationFilter("/login/github", authenticationManager, jwtUtil, githubService);
+    public GithubAuthenticationFilter githubAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
+        GithubAuthenticationFilter filter = new GithubAuthenticationFilter("/login/github", authenticationManager, jwtUtil, userService);
         filter.setFilterProcessesUrl("/login/github");
         return filter;
     }
