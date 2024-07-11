@@ -37,13 +37,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public GauthAuthenticationFilter gauthAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
+    public GauthAuthenticationFilter gauthAuthenticationFilter(AuthenticationManager authenticationManager){
         GauthAuthenticationFilter filter = new GauthAuthenticationFilter("/login/gauth", authenticationManager, jwtUtil, userService);
         filter.setFilterProcessesUrl("/login/gauth");
         return filter;
     }
     @Bean
-    public GithubAuthenticationFilter githubAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
+    public GithubAuthenticationFilter githubAuthenticationFilter(AuthenticationManager authenticationManager){
         GithubAuthenticationFilter filter = new GithubAuthenticationFilter("/login/github", authenticationManager, jwtUtil, userService);
         filter.setFilterProcessesUrl("/login/github");
         return filter;

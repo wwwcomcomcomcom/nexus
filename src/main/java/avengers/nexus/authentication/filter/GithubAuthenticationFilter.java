@@ -40,7 +40,7 @@ public class GithubAuthenticationFilter extends AbstractAuthenticationProcessing
                     new UsernamePasswordAuthenticationToken(user, user.getId())
             );
         }catch (ResponseStatusException e){
-            throw new AuthenticationException("Authentication failed by " + e.getStatusCode().toString() + e.getMessage()) {};
+            throw new AuthenticationException("Authentication failed by " + e.getStatusCode() + e.getMessage()) {};
         }
     }
 

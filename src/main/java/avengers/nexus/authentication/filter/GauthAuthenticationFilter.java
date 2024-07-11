@@ -1,7 +1,6 @@
 package avengers.nexus.authentication.filter;
 
 import avengers.nexus.authentication.jwt.JWTUtil;
-import avengers.nexus.authentication.service.AuthenticateService;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -41,7 +40,7 @@ public class GauthAuthenticationFilter extends AbstractAuthenticationProcessingF
                     new UsernamePasswordAuthenticationToken(user, user.getId())
             );
         }catch (ResponseStatusException e){
-            throw new AuthenticationException("Authentication failed by " + e.getStatusCode().toString() + e.getMessage()) {};
+            throw new AuthenticationException("Authentication failed by " + e.getStatusCode() + e.getMessage()) {};
         }
     }
 
