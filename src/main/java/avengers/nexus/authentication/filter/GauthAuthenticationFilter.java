@@ -32,7 +32,7 @@ public class GauthAuthenticationFilter extends AbstractAuthenticationProcessingF
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response)
-            throws AuthenticationException, IOException {
+            throws AuthenticationException {
         String accessCode = request.getParameter("accessCode");
         try {
             User user = userService.loginWithGauth(accessCode);

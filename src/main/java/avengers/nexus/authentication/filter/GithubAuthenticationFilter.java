@@ -32,8 +32,7 @@ public class GithubAuthenticationFilter extends AbstractAuthenticationProcessing
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response)
-            throws AuthenticationException, IOException {
-        String accessCode = request.getReader().lines().reduce("", String::concat);
+            throws AuthenticationException {
         String accessCode = request.getParameter("accessCode");
         try {
             User user = userService.loginWithGithub(accessCode);
