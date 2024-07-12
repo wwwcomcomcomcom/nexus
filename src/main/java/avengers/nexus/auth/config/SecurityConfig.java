@@ -2,6 +2,7 @@ package avengers.nexus.auth.config;
 
 import avengers.nexus.auth.filter.GauthAuthenticationFilter;
 import avengers.nexus.auth.filter.GithubAuthenticationFilter;
+import avengers.nexus.auth.filter.JwtAuthorizationFilter;
 import avengers.nexus.auth.jwt.JWTUtil;
 import avengers.nexus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,7 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(gauthAuthenticationFilter(http.getSharedObject(AuthenticationManager.class)), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil,userService), GauthAuthenticationFilter.class)
                 .addFilterAfter(githubAuthenticationFilter(http.getSharedObject(AuthenticationManager.class)), GauthAuthenticationFilter.class)
         ;
         return http.build();
