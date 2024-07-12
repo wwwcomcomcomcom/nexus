@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -57,7 +59,8 @@ public class UserController {
     }
     @GetMapping("/info")
     public ResponseEntity<User> getUserInfo(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
         if(user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
         return ResponseEntity.ok(user);
     }
