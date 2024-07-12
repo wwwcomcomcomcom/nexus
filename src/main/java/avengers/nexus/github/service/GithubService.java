@@ -1,6 +1,8 @@
 package avengers.nexus.github.service;
 
+import avengers.nexus.auth.service.AuthenticateService;
 import avengers.nexus.github.domain.GithubUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -14,15 +16,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class OauthService {
+@RequiredArgsConstructor
+public class GithubService implements AuthenticateService {
     @Value("${github.client-id}")
     private String clientId;
     @Value("${github.client-secret}")
     private String clientSecret;
     private final RestTemplate restTemplate;
-    public OauthService(RestTemplate restTemplate){
-        this.restTemplate = restTemplate;
-    }
+
     public String getAccessToken(String authorizationCode) {
         String url = "https://github.com/login/oauth/access_token";
 
@@ -68,5 +69,10 @@ public class OauthService {
                 new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to retrieve user info from github"));
         githubUser.setToken(token);
         return githubUser;
+    }
+
+    public GithubUser getGithubUserByAccessCode(String accessCode){
+        String token = getAccessToken(accessCode);
+        return getGithubUserByToken(token);
     }
 }
