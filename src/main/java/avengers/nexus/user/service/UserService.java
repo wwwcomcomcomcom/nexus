@@ -2,7 +2,7 @@ package avengers.nexus.user.service;
 
 import avengers.nexus.gauth.service.GauthService;
 import avengers.nexus.github.domain.GithubUser;
-import avengers.nexus.github.service.OauthService;
+import avengers.nexus.github.service.GithubService;
 import avengers.nexus.user.dto.UserSignupDto;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.repository.TokenMemoryRepository;
@@ -19,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
     private final UserRepository userRepository;
     private final TokenMemoryRepository tokenMemoryRepository;
-    private final OauthService oauthService;
+    private final GithubService githubService;
     private final GauthService gauthService;
 
     public User getUserById(long id) {
@@ -34,6 +34,12 @@ public class UserService {
         );
     }
 
+    public User getUserByGithubId(Long githubId){
+        return userRepository.findByGithubId(githubId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        );
+    }
+
     public void registerUser(UserSignupDto userSignupDto) {
         User user = User.builder()
                 .name(userSignupDto.getName())
@@ -42,8 +48,8 @@ public class UserService {
         userRepository.save(user);
     }
     public User loginWithGithub(String accessCode) {
-        String token = oauthService.getAccessToken(accessCode);
-        GithubUser githubUser = oauthService.getGithubUserByToken(token);
+        String token = githubService.getAccessToken(accessCode);
+        GithubUser githubUser = githubService.getGithubUserByToken(token);
         User user = userRepository.findByGithubId(githubUser.getId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         );

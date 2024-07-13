@@ -1,6 +1,7 @@
 package avengers.nexus.gauth.service;
 
 
+import avengers.nexus.auth.service.AuthenticateService;
 import gauth.GAuth;
 import gauth.GAuthToken;
 import gauth.GAuthUserInfo;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class GauthService {
+public class GauthService implements AuthenticateService {
     @Value("${gauth.client-id}")
     private String clientId;
     @Value("${gauth.client-secret}")
