@@ -22,6 +22,9 @@ public class GithubService implements AuthenticateService {
     private String clientId;
     @Value("${github.client-secret}")
     private String clientSecret;
+    @Value("${github.redirect-uri}")
+    private String redirectUri;
+
     private final RestTemplate restTemplate;
 
     public String getAccessToken(String authorizationCode) {
@@ -33,6 +36,7 @@ public class GithubService implements AuthenticateService {
         Map<String, String> body = new HashMap<>();
         body.put("client_id", clientId);
         body.put("client_secret", clientSecret);
+        body.put("redirect_uri", redirectUri);
         body.put("code", authorizationCode);
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
