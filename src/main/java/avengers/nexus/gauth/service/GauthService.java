@@ -22,6 +22,9 @@ public class GauthService implements AuthenticateService {
     private final GAuth gAuth;
 
     public String getAccessToken(String authorizationCode) {
+        System.out.println("clientId: " + clientId);
+        System.out.println("clientSecret: " + clientSecret);
+        System.out.println("redirectUri: " + redirectUri);
         GAuthToken token = gAuth.generateToken(
                 authorizationCode,
                 clientId,
