@@ -16,6 +16,8 @@ public class GauthService implements AuthenticateService {
     private String clientId;
     @Value("${gauth.client-secret}")
     private String clientSecret;
+    @Value("${gauth.redirect-uri}")
+    private String redirectUri;
 
     private final GAuth gAuth;
 
@@ -24,7 +26,7 @@ public class GauthService implements AuthenticateService {
                 authorizationCode,
                 clientId,
                 clientSecret,
-                "http://localhost:5173"
+                redirectUri
         );
         return token.getAccessToken();
     }
