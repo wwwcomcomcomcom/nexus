@@ -29,14 +29,19 @@ public class UserController {
     public ResponseEntity<String> signup(@RequestParam String accessCode) {
         GAuthUserInfo gauthUser = gauthService.getUserInfoByCode(accessCode);
         //user profile is Nullable
-        UserSignupDto user = new UserSignupDto(gauthUser.getName(),gauthUser.getProfileUrl());
+        UserSignupDto user = UserSignupDto.builder()
+                .name(gauthUser.getName())
+                .profileImageUrl(gauthUser.getProfileUrl()).build();
         userService.registerUser(user);
         return ResponseEntity.ok("User signed up!");
     }
     @PostMapping("/signup/github")
     public ResponseEntity<String> signupWithGithub(@RequestParam String accessCode){
         GithubUser githubUser = githubService.getGithubUserByAccessCode(accessCode);
-        UserSignupDto user = new UserSignupDto(githubUser.getLogin(),githubUser.getAvatarUrl());
+        UserSignupDto user = UserSignupDto.builder()
+                .name(githubUser.getLogin())
+                .profileImageUrl(githubUser.getAvatarUrl())
+                .githubId(githubUser.getId()).build();
         userService.registerUser(user);
         return ResponseEntity.ok("User signed up!");
     }
