@@ -1,12 +1,15 @@
 package avengers.nexus.user.controller;
 
 import avengers.nexus.gauth.service.GauthService;
+import avengers.nexus.github.domain.GithubUser;
+import avengers.nexus.github.service.GithubService;
 import avengers.nexus.user.dto.UserSignupDto;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.service.UserService;
 import gauth.GAuthUserInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,20 +18,25 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
     private final GauthService gauthService;
-    UserController(UserService userService, GauthService gauthService) {
-        this.userService = userService;
-        this.gauthService = gauthService;
-    }
-    @PostMapping("/signup")
+    private final GithubService githubService;
+    @PostMapping("/signup/gauth")
     //signup with gauth
     public ResponseEntity<String> signup(@RequestParam String accessCode) {
         GAuthUserInfo gauthUser = gauthService.getUserInfoByCode(accessCode);
         //user profile is Nullable
         UserSignupDto user = new UserSignupDto(gauthUser.getName(),gauthUser.getProfileUrl());
+        userService.registerUser(user);
+        return ResponseEntity.ok("User signed up!");
+    }
+    @PostMapping("/signup/github")
+    public ResponseEntity<String> signupWithGithub(@RequestParam String accessCode){
+        GithubUser githubUser = githubService.getGithubUserByAccessCode(accessCode);
+        UserSignupDto user = new UserSignupDto(githubUser.getLogin(),githubUser.getAvatarUrl());
         userService.registerUser(user);
         return ResponseEntity.ok("User signed up!");
     }
