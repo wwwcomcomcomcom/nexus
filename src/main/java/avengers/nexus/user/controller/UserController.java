@@ -65,6 +65,7 @@ public class UserController {
         session.setAttribute("user", user);
         session.setMaxInactiveInterval(86400);
     }
+    /** @deprecated  */
     @DeleteMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         request.getSession().invalidate();
