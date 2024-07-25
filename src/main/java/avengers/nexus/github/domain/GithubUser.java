@@ -1,5 +1,6 @@
 package avengers.nexus.github.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,5 +15,6 @@ public class GithubUser {
     private Long id;
     private String login;
     private String email;
+    @JsonProperty("avatar_url")
     private String avatarUrl;
 }
