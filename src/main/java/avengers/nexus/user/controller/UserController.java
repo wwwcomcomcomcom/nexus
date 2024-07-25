@@ -71,7 +71,7 @@ public class UserController {
         return ResponseEntity.ok("User logged out!");
     }
     @GetMapping("/info")
-    public ResponseEntity<User> getUserInfo(HttpServletRequest request) {
+    public ResponseEntity<User> getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if(user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
