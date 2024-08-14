@@ -17,7 +17,8 @@ import java.util.List;
 public class Project {
     @Id
     private Long id;
-    private String name;
+    private String title;
+    private String subtitle;
     private String description;
 
     private Long owner;
