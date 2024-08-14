@@ -1,10 +1,10 @@
 package avengers.nexus.project.entity;
 
-import avengers.nexus.utils.LongListConverter;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -12,7 +12,8 @@ import java.util.List;
 @Document(collection = "projects")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Getter
+@Setter
 public class Project {
     @Id
     private Long id;
