@@ -30,6 +30,7 @@ public class ProjectService {
                         .githubUrl(projectDto.getGithubUrl())
                         .build();
         projectRepository.save(project);
+        return project;
     }
     public void deleteProject(String id) {
         if (!projectRepository.existsById(id)) {
