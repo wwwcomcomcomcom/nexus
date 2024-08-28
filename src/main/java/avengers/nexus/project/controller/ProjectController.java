@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/project")
 @RequiredArgsConstructor
@@ -15,6 +17,10 @@ public class ProjectController {
     @GetMapping("/{id}")
     public Project getProject(@PathVariable String id) {
         return projectService.getProject(id);
+    }
+    @GetMapping("/")
+    public List<Project> getAllProject(){
+        return projectService.getAllProject();
     }
     @PostMapping("/")
     public ResponseEntity<?> createProject(@RequestBody CreateProjectDto project) {
