@@ -25,8 +25,8 @@ public class ProjectController {
     @PostMapping("/")
     public ResponseEntity<?> createProject(@RequestBody CreateProjectDto project) {
         try {
-            projectService.createProject(project);
-            return ResponseEntity.ok("Project created!");
+            Project result = projectService.createProject(project);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Project creation failed!");
         }
