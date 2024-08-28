@@ -1,11 +1,13 @@
 package avengers.nexus.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
+@Setter
+@Builder
 public class UserSignupDto {
+    private String id;
     private String name;
     private String profileImageUrl;
+    private Long githubId;
 }

@@ -1,39 +1,33 @@
 package avengers.nexus.project.entity;
 
-import avengers.nexus.utils.LongListConverter;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Id;
+import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Entity
-@Table(name = "projects")
+@Document(collection = "projects")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 public class Project {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+    private String id;
+    private String title;
+    private String subtitle;
     private String description;
 
-    //Wanted Role
-    private Byte frontend;
-    private Byte backend;
-    private Byte android;
-    private Byte ios;
-    private Byte flutter;
-    private Byte ai;
-    private Byte design;
-
     private Long owner;
-    @Convert(converter = LongListConverter.class)
     private List<Long> members = List.of();
 
     //null if not github registered
     private String githubUrl;
+
+    private String state;
+    private String stateDescription;
+
+    private List<Wanted> wanted = List.of();
 
 }

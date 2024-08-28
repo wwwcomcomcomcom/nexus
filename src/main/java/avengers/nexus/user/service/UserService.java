@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 
 @Service
 @AllArgsConstructor
@@ -44,6 +46,9 @@ public class UserService {
         User user = User.builder()
                 .name(userSignupDto.getName())
                 .profileImageUrl(userSignupDto.getProfileImageUrl())
+                .githubId(userSignupDto.getGithubId())
+                .followers(List.of())
+                .followings(List.of())
                 .build();
         userRepository.save(user);
     }
