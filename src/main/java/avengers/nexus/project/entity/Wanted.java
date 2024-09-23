@@ -1,9 +1,14 @@
 package avengers.nexus.project.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.List;
 
-class Wanted {
+@Getter
+@AllArgsConstructor
+public class Wanted {
     private String role;
-    private String description;
+    private Integer neededMemberCount;
     private List<String> stack;
 }
