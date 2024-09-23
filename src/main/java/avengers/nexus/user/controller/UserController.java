@@ -45,32 +45,6 @@ public class UserController {
         userService.registerUser(user);
         return ResponseEntity.ok("User signed up!");
     }
-    /** @deprecated  */
-    @PostMapping("/login/github")
-    public ResponseEntity<String> loginWithGithub(@RequestParam String accessCode, HttpServletRequest request) {
-        User user = userService.loginWithGithub(accessCode);
-        issueSession(user, request);
-        return ResponseEntity.ok("User logged in!");
-    }
-    /** @deprecated  */
-    @PostMapping("/login/gauth")
-    public ResponseEntity<String> loginWithGauth(@RequestParam String accessCode, HttpServletRequest request) {
-        User user = userService.loginWithGauth(accessCode);
-        issueSession(user, request);
-        return ResponseEntity.ok("User logged in!");
-    }
-    private void issueSession(User user, HttpServletRequest request) {
-        request.getSession().invalidate();
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        session.setMaxInactiveInterval(86400);
-    }
-    /** @deprecated  */
-    @DeleteMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        request.getSession().invalidate();
-        return ResponseEntity.ok("User logged out!");
-    }
     @GetMapping("/info")
     public ResponseEntity<User> getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
