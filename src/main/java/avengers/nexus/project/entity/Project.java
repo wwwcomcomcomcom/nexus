@@ -30,4 +30,16 @@ public class Project {
 
     private List<Wanted> wanted = List.of();
 
+    public void addMember(Long memberId) {
+        members.add(memberId);
+    }
+    public void removeMember(Long memberId) {
+        members.remove(memberId);
+    }
+    public void addWanted(Wanted wanted) {
+        this.wanted.add(wanted);
+    }
+    public void removeWanted(Wanted wanted) {
+        this.wanted.remove(wanted);
+    }
 }
