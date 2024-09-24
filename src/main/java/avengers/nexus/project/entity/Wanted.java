@@ -12,4 +12,4 @@ public class Wanted {
     private Integer neededMemberCount;
     private List<String> stack;
     private List<Long> applicants;
-
+}
