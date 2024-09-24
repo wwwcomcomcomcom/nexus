@@ -1,7 +1,9 @@
 package avengers.nexus.project.controller;
 
 import avengers.nexus.project.dto.CreateProjectDto;
+import avengers.nexus.project.dto.SubmitApplicationDto;
 import avengers.nexus.project.entity.Project;
+import avengers.nexus.project.entity.Wanted;
 import avengers.nexus.project.service.ProjectService;
 import avengers.nexus.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +67,24 @@ public class ProjectController {
             return ResponseEntity.ok("Member added successfully!");
         }catch (Exception e) {
             return ResponseEntity.badRequest().body("Member addition failed!");
+        }
+    }
+
+    @PostMapping("/{projectId}/wanted")
+    public ResponseEntity<?> submitApplication(@PathVariable String projectId, @RequestBody SubmitApplicationDto applicationDto) {
+        User user = getAuthenticatedUser();
+        Project project = projectService.getProject(projectId);
+        Wanted wanted = project.getWanted()
+                .stream().filter(_wanted -> _wanted.equals(applicationDto.getWanted()))
+                .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wanted not found!"));
+        if (wanted.getApplicants().contains(user.getId())) {
+            return ResponseEntity.badRequest().body("Already applied!");
+        }
+        try {
+            wanted.submitApplication(user.getId());
+            return ResponseEntity.ok("Application submitted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Application submission failed!");
         }
     }
 }
