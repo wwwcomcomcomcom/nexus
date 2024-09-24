@@ -11,4 +11,5 @@ public class Wanted {
     private String role;
     private Integer neededMemberCount;
     private List<String> stack;
-}
+    private List<Long> applicants;
+
