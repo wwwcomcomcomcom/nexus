@@ -1,38 +1,23 @@
 package avengers.nexus;
 
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any()) // 특정 패키지경로를 API문서화 한다. 1차 필터
-                .paths(PathSelectors.any()) // apis중에서 특정 path조건 API만 문서화 하는 2차 필터
-                .build()
-                .groupName("Nexus") // group별 명칭을 주어야 한다.
-                .pathMapping("/")
-                .apiInfo(apiInfo())
-                .useDefaultResponseMessages(false); // 400,404,500 .. 표기를 ui에서 삭제한다.
+    public OpenAPI openAPI(){
+        return  new OpenAPI()
+                .components(new Components())
+                .info(apiInfo());
     }
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("Nexus API")
-                .description("명세서 대신 써")
-                .version("1.0.0")
-                .termsOfServiceUrl("")
-                .license("")
-                .licenseUrl("")
-                .build();
+    private Info apiInfo(){
+        return new Info()
+                .title("Avengers Nexus")
+                .description("Avengers Nexus API")
+                .version("1.0.0");
     }
 }
