@@ -12,4 +12,10 @@ public class Wanted {
     private Integer neededMemberCount;
     private List<String> stack;
     private List<Long> applicants;
+    public Wanted(String role, Integer neededMemberCount, List<String> stack) {
+        this.role = role;
+        this.neededMemberCount = neededMemberCount;
+        this.stack = stack;
+        this.applicants = List.of();
+    }
 }
