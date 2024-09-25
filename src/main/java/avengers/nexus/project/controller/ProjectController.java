@@ -99,7 +99,7 @@ public class ProjectController {
         }
     }
 
-    @PostMapping("/{projectId}/apllication")
+    @PostMapping("/{projectId}/application")
     @Operation(summary = "구인구직 지원", description = "프로젝트 구인구직에 지원합니다.")
     @Parameter(name = "projectId", description = "프로젝트 ID", required = true)
     @Parameter(name = "applicationDto", description = "SubmitApplicationDto, Wanted를 담고 있음.", required = true)
