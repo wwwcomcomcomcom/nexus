@@ -57,7 +57,8 @@ public class ProjectController {
     @Operation(summary = "프로젝트 삭제", description = "프로젝트를 삭제합니다.")
     @Parameter(name = "id", description = "프로젝트 ID", required = true)
     public void deleteProject(@PathVariable String id) {
-        projectService.deleteProject(id);
+        User user = getAuthenticatedUser();
+        projectService.deleteProject(id, user.getId());
     }
 
     @PostMapping("/{projectId}/member")
@@ -98,6 +99,19 @@ public class ProjectController {
             return ResponseEntity.badRequest().body("Wanted creation failed!");
         }
     }
+    @DeleteMapping("/{projectId}/wanted/")
+    @Operation(summary = "구인구직 삭제", description = "Wanted를 Project에서 삭제합니다.")
+    @Parameter(name = "projectId", description = "프로젝트 ID", required = true)
+    @Parameter(name = "wanted", description = "Wanted", required = true)
+    public ResponseEntity<?> deleteWanted(@PathVariable String projectId, @RequestBody Wanted wanted) {
+        User user = getAuthenticatedUser();
+        try {
+            projectService.deleteWanted(projectId, user.getId(), wanted);
+            return ResponseEntity.ok("Wanted deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Wanted deletion failed!");
+        }
+    }
 
     @PostMapping("/{projectId}/application")
     @Operation(summary = "구인구직 지원", description = "프로젝트 구인구직에 지원합니다.")
@@ -105,18 +119,11 @@ public class ProjectController {
     @Parameter(name = "applicationDto", description = "SubmitApplicationDto, Wanted를 담고 있음.", required = true)
     public ResponseEntity<?> submitApplication(@PathVariable String projectId, @RequestBody SubmitApplicationDto applicationDto) {
         User user = getAuthenticatedUser();
-        Project project = projectService.getProject(projectId);
-        Wanted wanted = project.getWanted()
-                .stream().filter(_wanted -> _wanted.equals(applicationDto.getWanted()))
-                .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wanted not found!"));
-        if (wanted.getApplicants().contains(user.getId())) {
-            return ResponseEntity.badRequest().body("Already applied!");
-        }
-        try {
-            wanted.submitApplication(user.getId());
+        try{
+            projectService.submitApplication(projectId, user.getId(), applicationDto.getWanted());
             return ResponseEntity.ok("Application submitted successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Application submission failed!");
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body("Application failed!");
         }
     }
 }
