@@ -3,8 +3,8 @@ package avengers.nexus.project.controller;
 import avengers.nexus.project.dto.CreateProjectDto;
 import avengers.nexus.project.dto.SubmitApplicationDto;
 import avengers.nexus.project.entity.Project;
-import avengers.nexus.project.entity.Wanted;
 import avengers.nexus.project.service.ProjectService;
+import avengers.nexus.project.wanted.domain.Wanted;
 import avengers.nexus.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -102,7 +102,7 @@ public class ProjectController {
     @DeleteMapping("/{projectId}/wanted/")
     @Operation(summary = "구인구직 삭제", description = "Wanted를 Project에서 삭제합니다.")
     @Parameter(name = "projectId", description = "프로젝트 ID", required = true)
-    @Parameter(name = "wanted", description = "Wanted", required = true)
+        @Parameter(name = "wanted", description = "Wanted", required = true)
     public ResponseEntity<?> deleteWanted(@PathVariable String projectId, @RequestBody Wanted wanted) {
         User user = getAuthenticatedUser();
         try {

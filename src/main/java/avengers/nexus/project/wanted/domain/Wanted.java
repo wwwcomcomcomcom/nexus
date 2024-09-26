@@ -1,4 +1,4 @@
-package avengers.nexus.project.entity;
+package avengers.nexus.project.wanted.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

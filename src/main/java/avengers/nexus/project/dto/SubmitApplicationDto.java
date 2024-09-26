@@ -1,6 +1,6 @@
 package avengers.nexus.project.dto;
 
-import avengers.nexus.project.entity.Wanted;
+import avengers.nexus.project.wanted.domain.Wanted;
 import lombok.Getter;
 
 @Getter

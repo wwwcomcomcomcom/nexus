@@ -2,8 +2,8 @@ package avengers.nexus.project.service;
 
 import avengers.nexus.project.dto.CreateProjectDto;
 import avengers.nexus.project.entity.Project;
-import avengers.nexus.project.entity.Wanted;
 import avengers.nexus.project.repository.ProjectRepository;
+import avengers.nexus.project.wanted.domain.Wanted;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
