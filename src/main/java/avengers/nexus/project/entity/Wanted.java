@@ -2,19 +2,26 @@ package avengers.nexus.project.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class Wanted {
     private String role;
     private Integer neededMemberCount;
     private List<String> stack;
     private List<Long> applicants;
-    public void submitApplication(Long applicantId) {
-        this.applicants.add(applicantId);
-        this.neededMemberCount--;
+    public void addApplicant(Long userId) {
+        applicants.add(userId);
+    }
+    public void removeApplicant(Long userId) {
+        applicants.remove(userId);
+    }
+    public void decreaseNeedMember(){
+        neededMemberCount--;
     }
     public Wanted(String role, Integer neededMemberCount, List<String> stack) {
         this.role = role;
