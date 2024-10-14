@@ -5,6 +5,9 @@ import avengers.nexus.project.entity.Project;
 import avengers.nexus.project.repository.ProjectRepository;
 import avengers.nexus.project.wanted.domain.Wanted;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,6 +26,16 @@ public class ProjectService {
     }
     public List<Project> getAllProject() {
         return projectRepository.findAll();
+    }
+    public List<Project> getProjectsByPage(int index) {
+        Pageable pageable = PageRequest.of(index, 10);
+        Page<Project> page = projectRepository.findAll(pageable);
+        List<Project> result = page.getContent();
+        if(result.isEmpty()) {
+            System.out.println("Project not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
+        }
+        return result;
     }
     public Project createProject(CreateProjectDto projectDto) {
         Project project = Project.builder()

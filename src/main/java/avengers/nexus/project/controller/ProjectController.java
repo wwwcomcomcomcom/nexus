@@ -37,10 +37,20 @@ public class ProjectController {
     public Project getProject(@PathVariable String id) {
         return projectService.getProject(id);
     }
+
+
     @GetMapping("/")
     @Operation(summary = "모든 프로젝트 조회", description = "모든 프로젝트를 조회합니다.")
     public List<Project> getAllProject(){
         return projectService.getAllProject();
+    }
+
+
+    @GetMapping("/page/{page}")
+    @Operation(summary = "페이지별 프로젝트 조회", description = "페이지별 프로젝트를 조회합니다.")
+    @Parameter(name = "page", description = "페이지 번호", required = true)
+    public List<Project> getProjectByPage(@PathVariable int page) {
+        return projectService.getProjectsByPage(page);
     }
     @PostMapping("/")
     @Operation(summary = "프로젝트 생성", description = "프로젝트를 생성합니다.")
