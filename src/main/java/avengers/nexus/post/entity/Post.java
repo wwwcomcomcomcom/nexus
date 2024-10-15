@@ -1,8 +1,11 @@
 package avengers.nexus.post.entity;
 
-import jakarta.persistence.Id;
+import avengers.nexus.user.entity.User;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Document(collection = "posts")
 @NoArgsConstructor
@@ -12,10 +15,30 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 public class Post {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+
+    @Column(nullable = false, length = 50)
     private String title;
-    private String content;
-    private Long author;
+
+    @Column(nullable = false)
+    private String contents;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "author_id")
+    private User author;
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private List<Post> comments;
+
     private Long likes;
+
+
+    public void updatePost(String title, String contents, User author){
+        this.title = title;
+        this.contents = contents;
+        this.author = author;
+    }
+
 
 }
