@@ -25,7 +25,7 @@ public class Post {
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)

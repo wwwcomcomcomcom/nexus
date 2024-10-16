@@ -25,6 +25,7 @@ public class PostController {
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
 
+    //현재 사용자 JWT에서 가져옴
     private User getCurrentUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
         Long userId = jwtUtil.getUserId(token);
@@ -63,7 +64,6 @@ public class PostController {
     @PutMapping("/update/{id}")
     public PostDto updatePost(@PathVariable("id") String id, @RequestBody PostDto postDto, HttpServletRequest request) {
         User user = getCurrentUser(request);
-        PostDto updatedPost = postService.updatePost(id, postDto, user);
         return postService.updatePost(id, postDto, user);
     }
 
@@ -73,7 +73,7 @@ public class PostController {
     @DeleteMapping("/delete/{id}")
     public void deletePost(@PathVariable("id") String id, HttpServletRequest request) {
         User user = getCurrentUser(request);
-        postService.delete(id);
+        postService.delete(id,user);
     }
 
 
