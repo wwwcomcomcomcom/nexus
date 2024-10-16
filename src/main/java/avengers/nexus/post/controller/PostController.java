@@ -25,12 +25,15 @@ public class PostController {
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
 
-    //현재 사용자 JWT에서 가져옴
     private User getCurrentUser(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").replace("Bearer ", "");
-        Long userId = jwtUtil.getUserId(token);
+        Long userId = getUserIdFromToken(request);
         return userRepository.findById(userId).orElseThrow(()->
                 new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
+
+    private Long getUserIdFromToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        return jwtUtil.getUserId(token);
     }
 
 

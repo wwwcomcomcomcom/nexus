@@ -28,11 +28,10 @@ public class PostService {
     }
 
     //특정 게시글 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public PostDto getPost(String id) {
-        Post post = postRepository.findById(id).orElseThrow(()->{
-            return new IllegalArgumentException("Post Id를 찾을 수 없습니다.");
-        });
+        Post post = postRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 
         return PostDto.toDto(post);
     }
@@ -55,7 +54,7 @@ public class PostService {
     public PostDto updatePost(String id, PostDto postDto, User currentUser) {
 
         Post post = postRepository.findById(id).orElseThrow(()->
-           new IllegalArgumentException("Post ID를 찾을 수 없습니다!"));
+           new IllegalArgumentException("해당 게시글을 찾을 수 없습니다!"));
 
         if(!post.getAuthor().getId().equals(currentUser.getId())) {
             throw new SecurityException("수정 권한이 없습니다.");
@@ -71,7 +70,7 @@ public class PostService {
     @Transactional
     public void delete(String id, User currentUser){
         Post post = postRepository.findById(id).orElseThrow(()->
-                new IllegalArgumentException("Board ID를 찾을 수 없습니다.")
+                new IllegalArgumentException("해당 게시글을 찾을 수 없습니다.")
         );
 
         if(!post.getAuthor().getId().equals(currentUser.getId())) {
