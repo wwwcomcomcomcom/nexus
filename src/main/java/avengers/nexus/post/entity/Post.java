@@ -1,5 +1,6 @@
 package avengers.nexus.post.entity;
 
+import avengers.nexus.Timestamped;
 import avengers.nexus.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,24 +14,14 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class Post {
+public class Post extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    @Column(nullable = false, length = 50)
     private String title;
-
-    @Column(nullable = false)
     private String contents;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", nullable = false)
     private User author;
-
-    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Post> comments;
-
     private Long likes;
 
 
