@@ -23,8 +23,8 @@ public class ReplyService {
     //댓글 작성
     @Transactional
     public void writeReply(String postId, ReplyDto replyDto, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(()->{return new IllegalArgumentException("게시판을 찾을 수 없습니다.");
-        });
+        Post post = postRepository.findById(postId).orElseThrow(()->
+                new IllegalArgumentException("게시판을 찾을 수 없습니다."));
 
         Reply reply = Reply.builder()
                 .contents(replyDto.getContents())
@@ -52,6 +52,10 @@ public class ReplyService {
             new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
 
 
+        if(!reply.getPost().getId().equals(postId)) {
+            throw new IllegalArgumentException("해당 게시글에 속한 댓글이 아닙니다.");
+        }
+
         if(!reply.getUser().getId().equals(currentUser.getId())) {
             throw new SecurityException("삭제 권한이 없습니다.");
         }
@@ -66,6 +70,9 @@ public class ReplyService {
         Reply reply = replyRepository.findById(replyId).orElseThrow(()->
             new IllegalArgumentException("해당 댓글을  찾을 수 없습니다."));
 
+        if(!reply.getPost().getId().equals(postId)) {
+            throw new IllegalArgumentException("해당 게시글에 속한 댓글이 아닙니다.");
+        }
 
         if(!reply.getUser().getId().equals(user.getId())) {
             throw new SecurityException("수정 권한이 없습니다.");
