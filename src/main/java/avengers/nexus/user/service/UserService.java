@@ -7,7 +7,7 @@ import avengers.nexus.user.dto.UserSignupDto;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.repository.TokenMemoryRepository;
 import avengers.nexus.user.repository.UserRepository;
-import gauth.GAuthUserInfo;
+import gauth.response.GAuthUserInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
