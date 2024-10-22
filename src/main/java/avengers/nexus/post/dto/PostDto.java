@@ -13,6 +13,7 @@ public class PostDto {
     private String title;
     private String contents;
     private String author;
+    private boolean liked;
 
     public static PostDto toDto(Post post){
         return PostDto.builder()
@@ -20,6 +21,7 @@ public class PostDto {
                 .title(post.getTitle())
                 .contents(post.getContents())
                 .author(post.getAuthor().getName())
+                .liked(post.isLiked())
                 .build();
 
     }

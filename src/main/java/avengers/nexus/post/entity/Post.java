@@ -21,8 +21,11 @@ public class Post extends Timestamped {
     private String title;
     private String contents;
     private User author;
-    private List<Post> comments;
+    private List<Post> reply;
     private Long likes;
+    private List<User> likedBy;
+    private boolean liked;
+
 
 
     public void updatePost(String title, String contents, User author){
@@ -30,6 +33,5 @@ public class Post extends Timestamped {
         this.contents = contents;
         this.author = author;
     }
-
 
 }
