@@ -3,8 +3,8 @@ package avengers.nexus.gauth.service;
 
 import avengers.nexus.auth.service.AuthenticateService;
 import gauth.GAuth;
-import gauth.GAuthToken;
-import gauth.GAuthUserInfo;
+import gauth.response.GAuthToken;
+import gauth.response.GAuthUserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

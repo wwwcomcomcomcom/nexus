@@ -6,7 +6,7 @@ import avengers.nexus.github.service.GithubService;
 import avengers.nexus.user.dto.UserSignupDto;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.service.UserService;
-import gauth.GAuthUserInfo;
+import gauth.response.GAuthUserInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
