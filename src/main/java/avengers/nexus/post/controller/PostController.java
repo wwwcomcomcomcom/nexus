@@ -1,6 +1,6 @@
 package avengers.nexus.post.controller;
 
-import avengers.nexus.post.Service.PostService;
+import avengers.nexus.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 

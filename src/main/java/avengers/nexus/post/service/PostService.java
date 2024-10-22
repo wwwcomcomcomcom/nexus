@@ -1,6 +1,6 @@
-package avengers.nexus.post.Service;
+package avengers.nexus.post.service;
 
-import avengers.nexus.post.Repository.PostRepository;
+import avengers.nexus.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
