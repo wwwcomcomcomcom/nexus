@@ -28,10 +28,4 @@ public class Post extends Timestamped {
 
 
 
-    public void updatePost(String title, String contents, User author){
-        this.title = title;
-        this.contents = contents;
-        this.author = author;
-    }
-
 }
