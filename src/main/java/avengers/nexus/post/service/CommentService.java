@@ -6,10 +6,13 @@ import avengers.nexus.post.dto.CreateCommentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     private final PostService postService;
+
     public Comment createComment(String postId, CreateCommentDto comment) {
         Post post = postService.getPostById(postId);
         Comment newComment = new Comment(
@@ -24,6 +27,10 @@ public class CommentService {
         Post post = postService.getPostById(postId);
         post.deleteComment(commentId);
         postService.savePost(post);
+    }
+    public List<Comment> getComments(String postId) {
+        List<Comment> comments = postService.getPostById(postId).getComments();
+        return comments;
     }
     public Comment getCommentById(String postId, String commentId) {
         Post post = postService.getPostById(postId);
