@@ -14,7 +14,7 @@ public class Timestamped {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Field("update_at")
+    @Field("updated_at")
     private LocalDateTime updatedAt;
 
 

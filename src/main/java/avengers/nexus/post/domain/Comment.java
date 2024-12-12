@@ -1,15 +1,18 @@
 package avengers.nexus.post.domain;
 
+import avengers.nexus.Timestamped;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-public class Comment {
+@Document
+public class Comment extends Timestamped {
     @Id
     private String id;
     private String content;
