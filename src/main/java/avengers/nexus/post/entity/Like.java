@@ -17,5 +17,11 @@ public class Like {
     private Long id;
 
     private User user;
-    private Post target;
+    private Object target;
+
+    public Like(User user, Object target) {
+        this.user = user;
+        this.target = target;
+    }
+
 }
