@@ -1,7 +1,7 @@
 package avengers.nexus.post.dto;
 
-import avengers.nexus.post.entity.Bookmark;
-import avengers.nexus.post.entity.Post;
+import avengers.nexus.post.domain.Bookmark;
+import avengers.nexus.post.domain.Post;
 import avengers.nexus.user.entity.User;
 import lombok.Builder;
 import lombok.Data;
@@ -27,4 +27,5 @@ public class BookmarkDto {
                 .postIds(bookmark.getPostIds())
                 .build();
     }
+
 }
