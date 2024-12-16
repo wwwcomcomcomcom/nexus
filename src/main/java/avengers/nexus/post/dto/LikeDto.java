@@ -1,6 +1,6 @@
 package avengers.nexus.post.dto;
 
-import avengers.nexus.post.entity.Like;
+import avengers.nexus.post.domain.Like;
 
 import avengers.nexus.post.entity.Post;
 import lombok.Builder;

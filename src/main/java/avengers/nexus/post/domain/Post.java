@@ -1,5 +1,6 @@
 package avengers.nexus.post.domain;
 
+import avengers.nexus.user.entity.User;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,9 +18,11 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private Long author;
+    private User author;
     private Long likes;
+    private List<User> likedBy; // 좋아요 누른 사용자 리스트
     private List<Comment> comments;
+
     public void addComment(Comment comment) {
         this.comments.add(comment);
     }
@@ -35,4 +38,8 @@ public class Post {
     public void removeLike() {
         this.likes--;
     }
+    public boolean isLiked(User user) {
+        return this.likedBy.contains(user);
+    }
+
 }
