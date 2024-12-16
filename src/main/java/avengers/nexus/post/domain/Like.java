@@ -1,4 +1,4 @@
-package avengers.nexus.post.entity;
+package avengers.nexus.post.domain;
 
 
 import avengers.nexus.user.entity.User;
