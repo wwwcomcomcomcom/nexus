@@ -22,19 +22,4 @@ public class Bookmark {
         this.postIds = new ArrayList<>();
     }
 
-    public void addPost(Post postId) {
-        if (!this.postIds.contains(postId)) {
-            this.postIds.add(postId);
-        }
-    }
-
-    public void removePost(Post postId) {
-        this.postIds.remove(postId);
-    }
-
-    public boolean isBookmarked(Post postId){
-        return this.postIds.contains(postId);
-    }
-
-
 }
