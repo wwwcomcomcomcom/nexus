@@ -19,11 +19,5 @@ public class Reply extends Timestamped {
     private String content;
     private User author;
     private String postId;
-
-    public Reply(String content, User author, String postId){
-        this.content = content;
-        this.author = author;
-        this.postId = postId;
-    }
-
+    
 }
