@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class LikeService {
     private final LikeRepository likeRepository;
     private final CommentService commentService;
-    private final LikeService likeService;
     private final PostRepository postRepository;
 
     public Like existingLike(User user, Object target) {
@@ -21,7 +20,7 @@ public class LikeService {
     }
 
     public LikeDto likeObject(Object target, User user, boolean isAdding) {
-        Like existingLike = likeService.existingLike(user, target);
+        Like existingLike = this.existingLike(user, target);
 
         if (isAdding) {
             if (existingLike == null) {
