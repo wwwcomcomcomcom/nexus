@@ -6,6 +6,8 @@ import avengers.nexus.post.dto.CreatePostDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/post")
@@ -15,6 +17,10 @@ public class PostController {
     @GetMapping("/{id}")
     public Post getPostById(@PathVariable String id) {
         return postService.getPostById(id);
+    }
+    @GetMapping("/")
+    public List<Post> getAllPosts() {
+        return postService.getAllPosts();
     }
     @PostMapping("/create")
     public Post createPost(@RequestBody CreatePostDto post) {
