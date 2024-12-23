@@ -31,6 +31,8 @@ public class ProjectController {
         if(user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
         return user;
     }
+
+
     @GetMapping("/{id}")
     @Operation(summary = "프로젝트 조회", description = "해당 id의 프로젝트를 조회합니다.")
     @Parameter(name = "id", description = "프로젝트 ID", required = true)
@@ -52,6 +54,8 @@ public class ProjectController {
     public List<Project> getProjectByPage(@PathVariable int page) {
         return projectService.getProjectsByPage(page);
     }
+
+
     @PostMapping("/")
     @Operation(summary = "프로젝트 생성", description = "프로젝트를 생성합니다.")
     @Parameter(name = "project", description = "CreateProjectDto", required = true)
@@ -63,6 +67,8 @@ public class ProjectController {
             return ResponseEntity.badRequest().body("Project creation failed!");
         }
     }
+
+
     @DeleteMapping("/{id}")
     @Operation(summary = "프로젝트 삭제", description = "프로젝트를 삭제합니다.")
     @Parameter(name = "id", description = "프로젝트 ID", required = true)
@@ -109,10 +115,12 @@ public class ProjectController {
             return ResponseEntity.badRequest().body("Wanted creation failed!");
         }
     }
+
+
     @DeleteMapping("/{projectId}/wanted/")
     @Operation(summary = "구인구직 삭제", description = "Wanted를 Project에서 삭제합니다.")
     @Parameter(name = "projectId", description = "프로젝트 ID", required = true)
-        @Parameter(name = "wanted", description = "Wanted", required = true)
+    @Parameter(name = "wanted", description = "Wanted", required = true)
     public ResponseEntity<?> deleteWanted(@PathVariable String projectId, @RequestBody Wanted wanted) {
         User user = getAuthenticatedUser();
         try {

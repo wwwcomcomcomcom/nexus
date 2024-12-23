@@ -16,13 +16,12 @@ public class AppConfig {
     public GAuth gAuth(){return new GAuthImpl();}
 
     @Bean
-    public SocketIOServer socketIOServer(AuthorizationListener authorizationListener){
+    public SocketIOServer socketIOServer(){
         com.corundumstudio.socketio.Configuration config = new com.corundumstudio.socketio.Configuration();
         config.setHostname("127.0.0.1");
         config.setPort(8081);
         config.setBossThreads(1);
         config.setWorkerThreads(2);
-        config.setAuthorizationListener(authorizationListener);
         return new SocketIOServer(config);
     }
 }
