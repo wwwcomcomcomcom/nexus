@@ -14,7 +14,7 @@ public class PostDto {
     private String id;
     private String title;
     private String contents;
-    private User author;
+    private Long author;
     private boolean liked;
 
     public static PostDto toDto(Post post){
