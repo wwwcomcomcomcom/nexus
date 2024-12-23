@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -32,13 +31,13 @@ public class PostController {
         return userRepository.findById(userId).orElseThrow(() ->
                 new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
-
-
-    @Operation(summary = "전체 게시글 보기", description = "전체 게시글 조회한다.")
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    public List<PostDto> getPosts() {
-        return postService.getPosts();
+    @GetMapping("/")
+    public List<Post> getAllPosts() {
+        return postService.getAllPosts();
+    }
+    @PostMapping("/create")
+    public Post createPost(@RequestBody CreatePostDto post) {
+        return postService.createPost(post);
     }
 
 

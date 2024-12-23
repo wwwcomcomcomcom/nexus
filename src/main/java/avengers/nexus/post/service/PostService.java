@@ -11,11 +11,27 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
 
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
+    }
+
+    public Post getPostById(String id) {
+        return postRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+    }
+    public Post createPost(CreatePostDto post){
+        Post newPost = new Post();
+        newPost.setTitle(post.getTitle());
+        newPost.setContent(post.getContent());
+        newPost.setAuthor(post.getAuthor());
+        return postRepository.save(newPost);
+    }
     public void savePost(Post post) {
         postRepository.save(post);  // Post 객체를 데이터베이스에 저장
     }
