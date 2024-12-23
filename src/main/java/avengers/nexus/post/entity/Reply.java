@@ -1,23 +1,24 @@
-package avengers.nexus.post.domain;
+package avengers.nexus.post.entity;
 
 import avengers.nexus.Timestamped;
 import avengers.nexus.user.entity.User;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@AllArgsConstructor
+@Document("replies")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Builder
-@Document
+
 public class Reply extends Timestamped {
     @Id
     private String id;
 
-    private String content;
-    private User author;
-    private String postId;
-    
+    private String contents;
+    private User user;
+    private Post post;
+
 }

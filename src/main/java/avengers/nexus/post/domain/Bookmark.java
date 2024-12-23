@@ -1,10 +1,11 @@
 package avengers.nexus.post.domain;
 
-import avengers.nexus.Timestamped;
 import avengers.nexus.user.entity.User;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,12 +13,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @Builder
 @Document
-public class Reply extends Timestamped {
+public class Bookmark {
     @Id
     private String id;
 
-    private String content;
-    private User author;
-    private String postId;
-    
+    private User userId;
+    private List<Post> postIds;
 }
