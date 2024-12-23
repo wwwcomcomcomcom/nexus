@@ -3,8 +3,13 @@ package avengers.nexus.post.controller;
 import avengers.nexus.post.service.PostService;
 import avengers.nexus.post.domain.Post;
 import avengers.nexus.post.dto.CreatePostDto;
+import avengers.nexus.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,7 +29,10 @@ public class PostController {
     }
     @PostMapping("/create")
     public Post createPost(@RequestBody CreatePostDto post) {
-        return postService.createPost(post);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not logged in");
+        User user = (User) authentication.getCredentials();
+        return postService.createPost(post,user.getId());
     }
     @PostMapping("/like/{id}")
     public void likePost(@PathVariable String id) {

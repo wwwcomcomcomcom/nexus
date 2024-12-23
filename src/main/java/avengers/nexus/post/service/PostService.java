@@ -22,11 +22,11 @@ public class PostService {
     public Post getPostById(String id) {
         return postRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
     }
-    public Post createPost(CreatePostDto post){
+    public Post createPost(CreatePostDto post,Long authorId){
         Post newPost = new Post();
         newPost.setTitle(post.getTitle());
         newPost.setContent(post.getContent());
-        newPost.setAuthor(post.getAuthor());
+        newPost.setAuthor(authorId);
         return postRepository.save(newPost);
     }
     public void savePost(Post post) {
