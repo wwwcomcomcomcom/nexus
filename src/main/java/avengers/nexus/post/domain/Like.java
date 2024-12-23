@@ -1,23 +1,27 @@
 package avengers.nexus.post.domain;
 
-import avengers.nexus.Timestamped;
+
 import avengers.nexus.user.entity.User;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "likes")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
-@Document
-public class Reply extends Timestamped {
+public class Like {
     @Id
-    private String id;
+    private Long id;
 
-    private String content;
-    private User author;
-    private String postId;
-    
+    private User user;
+    private Object target;
+
+    public Like(User user, Object target) {
+        this.user = user;
+        this.target = target;
+    }
+
 }

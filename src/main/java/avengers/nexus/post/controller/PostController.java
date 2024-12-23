@@ -1,5 +1,6 @@
 package avengers.nexus.post.controller;
 
+import avengers.nexus.post.dto.PostDto;
 import avengers.nexus.post.service.PostService;
 import avengers.nexus.post.domain.Post;
 import avengers.nexus.post.dto.CreatePostDto;
@@ -19,9 +20,15 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
+    private User getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not logged in");
+        return (User) authentication.getCredentials();
+    }
+
     @GetMapping("/{id}")
-    public Post getPostById(@PathVariable String id) {
-        return postService.getPostById(id);
+    public PostDto getPostById(@PathVariable String id) {
+        return postService.getPost(id);
     }
     @GetMapping("/")
     public List<Post> getAllPosts() {
@@ -29,21 +36,19 @@ public class PostController {
     }
     @PostMapping("/create")
     public Post createPost(@RequestBody CreatePostDto post) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not logged in");
-        User user = (User) authentication.getCredentials();
+        User user = getUser();
         return postService.createPost(post,user.getId());
     }
     @PostMapping("/like/{id}")
     public void likePost(@PathVariable String id) {
-        postService.likePost(id);
+        postService.likePost(id,getUser());
     }
     @PostMapping("/dislike/{id}")
     public void dislikePost(@PathVariable String id) {
-        postService.dislikePost(id);
+        postService.dislikePost(id,getUser());
     }
     @DeleteMapping("/delete/{id}")
     public void deletePost(@PathVariable String id){
-        postService.deletePost(id);
+        postService.deletePost(id,getUser());
     }
 }
