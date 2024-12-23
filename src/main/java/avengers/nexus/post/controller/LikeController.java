@@ -8,6 +8,7 @@ import avengers.nexus.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,29 @@ public class LikeController {
     private final LikeService likeService;
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getLikeCount(@PathVariable("postid") String postId) {
+        Object target = likeService.getTargetById(postId, null, null);
+        int likeCount = likeService.getLikeCount(target);
+        return ResponseEntity.ok(likeCount);
+    }
+
+    @GetMapping("/comment/{commentId}/count")
+    public ResponseEntity<Integer> getCommentLikeCount(@PathVariable("postid") String postId,
+                                                       @PathVariable("commentId") String commentId) {
+        Object target = likeService.getTargetById(postId, commentId, null);
+        int likeCount = likeService.getLikeCount(target);
+        return ResponseEntity.ok(likeCount);
+    }
+
+    @GetMapping("/reply/{replyId}/count")
+    public ResponseEntity<Integer> getReplyLikeCount(@PathVariable("postid") String postId,
+                                                     @PathVariable("replyId") String replyId) {
+        Object target = likeService.getTargetById(postId, null, replyId);
+        int likeCount = likeService.getLikeCount(target);
+        return ResponseEntity.ok(likeCount);
+    }
 
     private User getCurrentUser(HttpServletRequest request) {
         Long userId = getUserIdFromToken(request);
