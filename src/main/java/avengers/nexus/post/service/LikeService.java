@@ -8,6 +8,8 @@ import avengers.nexus.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LikeService {
@@ -17,6 +19,11 @@ public class LikeService {
 
     public Like existingLike(User user, Object target) {
         return likeRepository.findByUserAndTarget(user, target);
+    }
+
+    public int getLikeCount(Object target) {
+        List<Like> likes = likeRepository.findAllByTarget(target);
+        return likes.size();
     }
 
     public LikeDto likeObject(Object target, User user, boolean isAdding) {
