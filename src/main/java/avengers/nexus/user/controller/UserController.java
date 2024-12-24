@@ -53,10 +53,15 @@ public class UserController {
     @GetMapping("/info")
     @Operation(summary = "내 정보 조회", description = "마이페이지용 내 정보를 반환합니다.")
     public ResponseEntity<User> getUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
-        User user = (User) authentication.getPrincipal();
-        if(user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
-        return ResponseEntity.ok(user);
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null)
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
+            User user = (User) authentication.getPrincipal();
+            if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
+            return ResponseEntity.ok(user);
+        } catch (ClassCastException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Header doesn't have Authorization");
+        }
     }
 }

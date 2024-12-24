@@ -38,7 +38,7 @@ public class PostController {
                 new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 
-   private User getUser() {
+    private User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not logged in");
         return (User) authentication.getPrincipal();
