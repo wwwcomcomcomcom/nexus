@@ -1,6 +1,8 @@
 package avengers.nexus.post.controller;
 
 import avengers.nexus.auth.jwt.JWTUtil;
+import avengers.nexus.post.domain.Post;
+import avengers.nexus.post.repository.PostRepository;
 import avengers.nexus.post.service.PostService;
 import avengers.nexus.post.dto.PostDto;
 import avengers.nexus.user.entity.User;
@@ -25,6 +27,7 @@ public class PostController {
 
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
+    private final PostRepository postRepository;
 
     private User getCurrentUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
@@ -32,6 +35,8 @@ public class PostController {
         return userRepository.findById(userId).orElseThrow(() ->
                 new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
+
+
 
 
     @Operation(summary = "전체 게시글 보기", description = "전체 게시글 조회한다.")

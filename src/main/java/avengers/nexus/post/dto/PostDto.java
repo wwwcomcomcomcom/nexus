@@ -16,9 +16,16 @@ public class PostDto {
     private String contents;
     private User author;
     private boolean liked;
+    private int totalCommentCount   // 대댓글 수
 
     public static PostDto toDto(Post post){
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        int commentCount = post.getComments().size();
+        int replyCount = post.getComments().stream()
+                .mapToInt(comment -> comment.getReplies().size())
+                .sum();
+        int totalCommentCount = commentCount + replyCount;
 
         return PostDto.builder()
                 .id(post.getId())
@@ -26,10 +33,7 @@ public class PostDto {
                 .contents(post.getContent())
                 .author(post.getAuthor())
                 .liked(post.isLiked(currentUser))
+                .totalCommentCount(totalCommentCount)
                 .build();
     }
-
-
-
-
 }
