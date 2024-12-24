@@ -18,7 +18,7 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private Long author;
+    private User author;
     private Long likes;
     private List<Long> likedBy; // 좋아요 누른 사용자 리스트
     private List<Comment> comments;
