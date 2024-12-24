@@ -19,13 +19,11 @@ import java.util.List;
 @RequestMapping("/post")
 public class PostController {
     private final PostService postService;
-
     private User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not logged in");
-        return (User) authentication.getCredentials();
+        return (User) authentication.getPrincipal();
     }
-
     @GetMapping("/{id}")
     public PostDto getPostById(@PathVariable String id) {
         return postService.getPost(id);

@@ -60,8 +60,9 @@ public class ProjectController {
     @Operation(summary = "프로젝트 생성", description = "프로젝트를 생성합니다.")
     @Parameter(name = "project", description = "CreateProjectDto", required = true)
     public ResponseEntity<?> createProject(@RequestBody CreateProjectDto project) {
+        User user = getAuthenticatedUser();
         try {
-            Project result = projectService.createProject(project);
+            Project result = projectService.createProject(project,user);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Project creation failed!");
@@ -74,7 +75,7 @@ public class ProjectController {
     @Parameter(name = "id", description = "프로젝트 ID", required = true)
     public void deleteProject(@PathVariable String id) {
         User user = getAuthenticatedUser();
-        projectService.deleteProject(id, user.getId());
+        projectService.deleteProject(id, user);
     }
 
     @PostMapping("/{projectId}/member")

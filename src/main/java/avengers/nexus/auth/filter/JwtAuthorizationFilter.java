@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -26,8 +27,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String authorization = request.getHeader("Authorization");
 
         if(authorization == null || !authorization.startsWith("Bearer ")){
-            System.out.println(request.getRequestURI());
-            System.out.println(authorization);
             filterChain.doFilter(request,response);
             return;
         }
@@ -38,9 +37,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         String username = jwtUtil.getUsername(token);
         Long userId = jwtUtil.getUserId(token);
-        User user = userService.getUserById(userId);
+        User user;
+        try {
+            user = userService.getUserById(userId);
+        }catch (ResponseStatusException e){
+            filterChain.doFilter(request,response);
+            return;
+        }
         if(!Objects.equals(user.getName(), username)) return;
-        System.out.println("complete");
         CustomUserDetails userDetails = new CustomUserDetails(user);
         Authentication authToken = new UsernamePasswordAuthenticationToken(user,null,userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
