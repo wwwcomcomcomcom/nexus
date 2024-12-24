@@ -1,13 +1,14 @@
 package avengers.nexus.post.controller;
 
-
 import avengers.nexus.auth.jwt.JWTUtil;
 import avengers.nexus.post.repository.PostRepository;
-import avengers.nexus.post.dto.PostDto;
 import avengers.nexus.post.service.PostService;
-import avengers.nexus.post.domain.Post;
-import avengers.nexus.post.dto.CreatePostDto;
+import avengers.nexus.post.dto.PostDto;
 import avengers.nexus.user.entity.User;
+import avengers.nexus.user.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -17,11 +18,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/post")
+@RequiredArgsConstructor
+
 public class PostController {
+
     private final PostService postService;
+
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
     private final PostRepository postRepository;
@@ -32,7 +37,7 @@ public class PostController {
         return userRepository.findById(userId).orElseThrow(() ->
                 new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
-  
+
    private User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not logged in");
@@ -45,30 +50,42 @@ public class PostController {
     public List<PostDto> getPosts() {
         return postService.getPosts();
     }
-      
+
+
+    @Operation(summary = "특정 게시글 보기", description = "게시글을 조회한다.")
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public PostDto getPostById(@PathVariable String id) {
+    public PostDto getPost(@PathVariable("id") String id) {
         return postService.getPost(id);
     }
-    @GetMapping("/")
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+
+
+    @Operation(summary = "게시글 작성", description = "게시글을 작성함")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/write")
+    public PostDto writePost(@RequestBody PostDto postDto, HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        return postService.writePost(postDto, user);
     }
-    @PostMapping("/create")
-    public Post createPost(@RequestBody CreatePostDto post) {
-        User user = getUser();
-        return postService.createPost(post,user.getId());
-    }
-    @PostMapping("/like/{id}")
-    public void likePost(@PathVariable String id) {
-        postService.likePost(id,getUser());
-    }
-    @PostMapping("/dislike/{id}")
-    public void dislikePost(@PathVariable String id) {
-        postService.dislikePost(id,getUser());
-    }
+
+
+//    @Operation(summary = "게시글 수정", description = "게시글을 수정함")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @PutMapping("/update/{id}")
+//    public PostDto updatePost(@PathVariable("id") String id, @RequestBody PostDto postDto, HttpServletRequest request) {
+//        User user = getCurrentUser(request);
+//        PostDto updatedPost = postService.updatePost(id, postDto, user);
+//        return postService.updatePost(id, postDto, user);
+//    }
+
+
+    @Operation(summary = "게시글 삭제", description = "게시글을 삭제함.")
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/delete/{id}")
-    public void deletePost(@PathVariable String id){
-        postService.deletePost(id,getUser());
+    public void deletePost(@PathVariable("id") String id, HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        postService.delete(id);
     }
+
+
 }
