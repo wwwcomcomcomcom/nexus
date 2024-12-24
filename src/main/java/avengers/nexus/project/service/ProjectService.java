@@ -4,11 +4,14 @@ import avengers.nexus.project.dto.CreateProjectDto;
 import avengers.nexus.project.entity.Project;
 import avengers.nexus.project.repository.ProjectRepository;
 import avengers.nexus.project.wanted.domain.Wanted;
+import avengers.nexus.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,99 +40,26 @@ public class ProjectService {
         }
         return result;
     }
-    public Project createProject(CreateProjectDto projectDto) {
+    public Project createProject(CreateProjectDto projectDto,User user) {
         Project project = Project.builder()
                         .title(projectDto.getTitle())
                         .subtitle(projectDto.getSubtitle())
                         .description(projectDto.getDescription())
-                        .owner(projectDto.getOwner())
+                        .owner(user.getId())
                         .githubUrl(projectDto.getGithubUrl())
+                        .state("모집중")
                         .build();
         projectRepository.save(project);
         return project;
     }
-    public void deleteProject(String id,Long ownerId) {
+    public void deleteProject(String id,User reqUser) {
         Optional<Project> project = projectRepository.findById(id);
         if (project.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
         }
-        if(project.get().getOwner().equals(ownerId)) {
+        if(project.get().getOwner().equals(reqUser.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only owner can delete project");
         }
         projectRepository.deleteById(id);
-    }
-
-    public Wanted registerWanted(String projectId,Long ownerId, Wanted wanted) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        if(!Objects.equals(project.getOwner(), ownerId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only owner can register wanted");
-        }
-        project.addWanted(wanted);
-        projectRepository.save(project);
-        return wanted;
-    }
-    public void deleteWanted(String projectId,Long ownerId, Wanted wanted) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        if(project.getWanted().stream().noneMatch(w -> w.equals(wanted))) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wanted not found");
-        }
-        if(!Objects.equals(project.getOwner(), ownerId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only owner can delete wanted");
-        }
-        project.removeWanted(wanted);
-        projectRepository.save(project);
-    }
-    public void submitApplication(String projectId, Long userId, Wanted reqWanted) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        Wanted wanted = project.getWanted().stream()
-                .filter(w -> w.equals(reqWanted))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wanted not found"));
-        wanted.addApplicant(userId);
-        projectRepository.save(project);
-    }
-    public void cancelApplication(String projectId, Long userId, Wanted reqWanted) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        Wanted wanted = project.getWanted().stream()
-                .filter(w -> w.equals(reqWanted))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wanted not found"));
-        wanted.removeApplicant(userId);
-        projectRepository.save(project);
-    }
-    public void acceptApplication(String projectId,Long ownerId, Long userId, Wanted reqWanted) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        if(!project.getOwner().equals(ownerId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only owner can accept application");
-        }
-        Wanted wanted = project.getWanted().stream()
-                .filter(w -> w.equals(reqWanted))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wanted not found"));
-        wanted.removeApplicant(userId);
-        wanted.decreaseNeedMember();
-        if(wanted.getNeededMemberCount() == 0) {
-            project.removeWanted(wanted);
-        }
-        project.addMember(userId);
-        projectRepository.save(project);
-    }
-    public void rejectApplication(String projectId,Long ownerId, Long userId, Wanted reqWanted) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        if(!project.getOwner().equals(ownerId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only owner can reject application");
-        }
-        Wanted wanted = project.getWanted().stream()
-                .filter(w -> w.equals(reqWanted))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wanted not found"));
-        wanted.removeApplicant(userId);
-        projectRepository.save(project);
     }
 }

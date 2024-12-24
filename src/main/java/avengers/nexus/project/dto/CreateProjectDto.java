@@ -10,5 +10,4 @@ public class CreateProjectDto {
     private String subtitle;
     private String description;
     private String githubUrl;
-    private Long owner;
 }

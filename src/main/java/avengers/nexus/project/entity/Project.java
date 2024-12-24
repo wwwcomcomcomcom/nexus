@@ -27,9 +27,9 @@ public class Project {
     private String githubUrl;
 
     private String state;
-    private String stateDescription;
 
-    private List<Wanted> wanted = List.of();
+
+//    private List<Wanted> wanted = List.of();
 
     public void addMember(Long memberId) {
         members.add(memberId);
@@ -37,10 +37,10 @@ public class Project {
     public void removeMember(Long memberId) {
         members.remove(memberId);
     }
-    public void addWanted(Wanted wanted) {
-        this.wanted.add(wanted);
-    }
-    public void removeWanted(Wanted wanted) {
-        this.wanted.remove(wanted);
-    }
+//    public void addWanted(Wanted wanted) {
+//        this.wanted.add(wanted);
+//    }
+//    public void removeWanted(Wanted wanted) {
+//        this.wanted.remove(wanted);
+//    }
 }

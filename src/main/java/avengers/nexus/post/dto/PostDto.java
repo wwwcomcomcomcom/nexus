@@ -14,7 +14,7 @@ public class PostDto {
     private String id;
     private String title;
     private String contents;
-    private User author;
+    private Long author;
     private boolean liked;
     private int totalCommentCount;   // 대댓글 수
 
