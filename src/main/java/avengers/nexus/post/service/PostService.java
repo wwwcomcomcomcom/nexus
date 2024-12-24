@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,14 +33,12 @@ public class PostService {
     }
 
     //전체 게시글 조회
-    @Transactional(readOnly = true)
+    @Transactional
     public List<PostDto> getPosts() {
         List<Post> posts = postRepository.findAll();
-        List<PostDto> postDtos = new ArrayList<>();
-
-        posts.forEach(post -> postDtos.add(PostDto.toDto(post)));
-
-        return postDtos;
+        return posts.stream()
+                .map(PostDto::toDto)
+                .toList();
     }
 
     //특정 게시글 조회

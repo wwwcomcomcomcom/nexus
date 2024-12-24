@@ -2,6 +2,7 @@ package avengers.nexus.post.service;
 
 import avengers.nexus.post.domain.Comment;
 import avengers.nexus.post.domain.Post;
+import avengers.nexus.post.dto.CommentSummaryDto;
 import avengers.nexus.post.dto.CreateCommentDto;
 import avengers.nexus.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,14 @@ import java.util.List;
 public class CommentService {
     private final PostService postService;
     private final PostRepository postRepository;
+    private final PostRepository commentRepository;
+
+    public CommentSummaryDto getCommentSummary(String postId) {
+        Post post = postRepository.getPostById(postId);
+        int commentCount = post.getComments().size();
+        int replyCount = post.getComments().stream().mapToInt(comment -> comment.getReplies().size()).sum();
+        return new CommentSummaryDto(commentCount, replyCount);
+    }
 
     public Comment createComment(String postId, CreateCommentDto comment) {
         Post post = postRepository.getPostById(postId);

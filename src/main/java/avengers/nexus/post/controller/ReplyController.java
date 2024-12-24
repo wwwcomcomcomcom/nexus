@@ -35,7 +35,7 @@ public class ReplyController {
         return jwtUtil.getUserId(token);
     }
 
-    @Operation(summary = "댓글 작성", description = "해당 게시글에 댓글을 작성합니다.")
+    @Operation(summary = "대댓글 작성", description = "해당 게시글에 대댓글을 작성합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void writeReply(@PathVariable String postId, @RequestBody ReplyDto replyDto, HttpServletRequest request) {
@@ -43,14 +43,14 @@ public class ReplyController {
         replyService.writeReply(postId, replyDto, user);
     }
 
-    @Operation(summary = "전체 댓글 조회", description = "해당 게시글에 대한 댓글을 모두 조회합니다.")
+    @Operation(summary = "전체 대댓글 조회", description = "해당 게시글에 대한 대댓글을 모두 조회합니다.")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<ReplyDto> getReplies(@PathVariable String postId) {
         return replyService.getReplies(postId);
     }
 
-    @Operation(summary = "댓글 삭제", description = "선택한 댓글을 삭제합니다.")
+    @Operation(summary = "대댓글 삭제", description = "선택한 대댓글을 삭제합니다.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{replyId}")
     public void deleteReply(@PathVariable String postId, @PathVariable String replyId, HttpServletRequest request) {
@@ -58,7 +58,7 @@ public class ReplyController {
         replyService.deleteReply(postId, replyId, user);
     }
 
-//    @Operation(summary = "댓글 수정", description = "선택한 댓글을 수정합니다.")
+//    @Operation(summary = "대댓글 수정", description = "선택한 대댓글을 수정합니다.")
 //    @ResponseStatus(HttpStatus.OK)
 //    @PutMapping("/{replyId}")
 //    public ReplyDto updateReply(@PathVariable String postId, @PathVariable String replyId, @RequestBody ReplyDto replyDto, HttpServletRequest request) {

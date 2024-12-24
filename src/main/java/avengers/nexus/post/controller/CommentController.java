@@ -1,6 +1,7 @@
 package avengers.nexus.post.controller;
 
 import avengers.nexus.auth.jwt.JWTUtil;
+import avengers.nexus.post.dto.CommentSummaryDto;
 import avengers.nexus.post.service.CommentService;
 import avengers.nexus.post.domain.Comment;
 import avengers.nexus.post.dto.CreateCommentDto;
@@ -29,6 +30,11 @@ public class CommentController {
     private Long getUserIdFromToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
         return jwtUtil.getUserId(token);
+    }
+
+    @GetMapping("/summary")
+    public CommentSummaryDto getCommentSummary(@PathVariable String postId) {
+        return commentService.getCommentSummary(postId);
     }
 
     @PostMapping("/")

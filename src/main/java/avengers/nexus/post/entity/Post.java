@@ -1,6 +1,6 @@
 package avengers.nexus.post.entity;
 
-import avengers.nexus.Timestamped;
+import avengers.nexus.post.domain.Comment;
 import avengers.nexus.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,24 +8,31 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document(collection = "posts")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
-public class Post extends Timestamped {
+@Document(collection = "posts")
+public class Post {
     @Id
     private String id;
-
     private String title;
-    private String contents;
+    private String content;
     private User author;
-    private List<Post> reply;
     private Long likes;
-    private List<User> likedBy;
-    private boolean liked;
+    private List<User> likedBy; // 좋아요 누른 사용자 리스트
+    private List<Comment> comments;
 
+    // 댓글 수 반환
+    public int getCommentCount() {
+        return comments.size();
+    }
 
-
+    // 대댓글 수 반환
+    public int getReplyCount() {
+        return comments.stream()
+                .mapToInt(comment -> comment.getReplies().size())
+                .sum();
+    }
 }

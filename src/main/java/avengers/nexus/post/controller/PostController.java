@@ -1,10 +1,16 @@
 package avengers.nexus.post.controller;
 
+
+import avengers.nexus.auth.jwt.JWTUtil;
+import avengers.nexus.post.repository.PostRepository;
 import avengers.nexus.post.dto.PostDto;
 import avengers.nexus.post.service.PostService;
 import avengers.nexus.post.domain.Post;
 import avengers.nexus.post.dto.CreatePostDto;
 import avengers.nexus.user.entity.User;
+import avengers.nexus.user.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -19,11 +25,29 @@ import java.util.List;
 @RequestMapping("/post")
 public class PostController {
     private final PostService postService;
+    private final UserRepository userRepository;
+    private final JWTUtil jwtUtil;
+    private final PostRepository postRepository;
+
+    private User getCurrentUser(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        Long userId = jwtUtil.getUserId(token);
+        return userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
     private User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User not logged in");
         return (User) authentication.getPrincipal();
     }
+
+    @Operation(summary = "전체 게시글 보기", description = "전체 게시글 조회한다.")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public List<PostDto> getPosts() {
+        return postService.getPosts();
+    }
+      
     @GetMapping("/{id}")
     public PostDto getPostById(@PathVariable String id) {
         return postService.getPost(id);
