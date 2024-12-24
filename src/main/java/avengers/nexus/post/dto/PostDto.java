@@ -16,7 +16,7 @@ public class PostDto {
     private String contents;
     private User author;
     private boolean liked;
-    private int totalCommentCount   // 대댓글 수
+    private int totalCommentCount;   // 대댓글 수
 
     public static PostDto toDto(Post post){
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
