@@ -2,11 +2,14 @@ package avengers.nexus.post.service;
 
 import avengers.nexus.post.domain.Comment;
 import avengers.nexus.post.domain.Post;
+import avengers.nexus.post.dto.CommentDto;
 import avengers.nexus.post.dto.CommentSummaryDto;
-import avengers.nexus.post.dto.CreateCommentDto;
+import avengers.nexus.post.repository.CommentRepository;
 import avengers.nexus.post.repository.PostRepository;
+import avengers.nexus.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ import java.util.List;
 public class CommentService {
     private final PostService postService;
     private final PostRepository postRepository;
-    private final PostRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     public CommentSummaryDto getCommentSummary(String postId) {
         Post post = postRepository.getPostById(postId);
@@ -24,23 +27,33 @@ public class CommentService {
         return new CommentSummaryDto(commentCount, replyCount);
     }
 
-    public Comment createComment(String postId, CreateCommentDto comment) {
-        Post post = postRepository.getPostById(postId);
-        Comment newComment = new Comment(
-                comment.getContent(),
-                comment.getAuthor()
+    @Transactional
+    public void createComment(String postId, CommentDto commentDto, User author) {
+        postRepository.findById(postId).orElseThrow(() ->
+                new IllegalArgumentException("게시글을 찾을 수 없습니다.")
         );
-        post.addComment(newComment);
-        postService.savePost(post);
-        return newComment;
+
+        Comment comment = new Comment(postId, commentDto.getContent(), author);
+
+        commentRepository.save(comment);
     }
+
     public void deleteComment(String postId, String commentId) {
         Post post = postRepository.getPostById(postId);
         post.deleteComment(commentId);
         postService.savePost(post);
     }
     public List<Comment> getComments(String postId) {
-        List<Comment> comments = postRepository.getPostById(postId).getComments();
+        Post post = postRepository.getPostById(postId);
+        if (post == null) {
+            throw new RuntimeException("게시글을 찾을 수 없습니다.");
+        }
+
+        List<Comment> comments = post.getComments();
+        if (comments == null) {
+            throw new RuntimeException("게시글에 달린 댓글을 찾을 수 없습니다.");
+        }
+
         return comments;
     }
     public Comment getCommentById(String postId, String commentId) {
@@ -48,6 +61,6 @@ public class CommentService {
         return post.getComments().stream()
                 .filter(comment -> comment.getId().equals(commentId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다."));
     }
 }

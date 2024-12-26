@@ -1,14 +1,16 @@
 package avengers.nexus.post.controller;
 
 import avengers.nexus.auth.jwt.JWTUtil;
+import avengers.nexus.post.dto.CommentDto;
 import avengers.nexus.post.dto.CommentSummaryDto;
 import avengers.nexus.post.service.CommentService;
 import avengers.nexus.post.domain.Comment;
-import avengers.nexus.post.dto.CreateCommentDto;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,25 +39,33 @@ public class CommentController {
         return commentService.getCommentSummary(postId);
     }
 
-    @PostMapping("/")
-    public Comment createComment(@PathVariable String postId, @RequestBody CreateCommentDto comment) {
-        return commentService.createComment(postId, comment);
-    }
-    @DeleteMapping("/delete/{commentId}")
-    public void deleteComment(@PathVariable String postId, @PathVariable String commentId, HttpServletRequest request) {
-        User user = getCurrentUser(request);
-
-        Comment comment = commentService.getCommentById(postId, commentId);
-        if (!comment.getAuthor().equals(user.getId())) {
-            throw new RuntimeException("삭제 권한이 없습니다.");
-        }
-
-        commentService.deleteComment(postId, commentId);
-    }
-
+    @Operation(summary = "전체 댓글 조회", description = "해당 게시글에 대한 댓글을 모두 조회합니다.")
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<Comment> getComments(@PathVariable String postId) {
         return commentService.getComments(postId);
+    }
+
+
+    @Operation(summary = "댓글 작성", description = "해당 게시글에 댓글을 작성합니다.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public void createComment(@PathVariable String postId, @RequestBody CommentDto commentDto, HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        commentService.createComment(postId, commentDto, user);
+    }
+
+
+    @Operation(summary = "댓글 삭제", description = "선택한 댓글을 삭제합니다.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{commentId}")
+    public void deleteComment(@PathVariable String postId, @PathVariable String commentId, HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        Comment comment = commentService.getCommentById(postId, commentId);
+        if (!comment.getAuthor().equals(user)) {
+            throw new RuntimeException("삭제 권한이 없습니다.");
+        }
+        commentService.deleteComment(postId, commentId);
     }
 
 }
