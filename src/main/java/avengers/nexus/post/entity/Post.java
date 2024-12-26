@@ -1,6 +1,5 @@
 package avengers.nexus.post.entity;
 
-import avengers.nexus.Timestamped;
 import avengers.nexus.post.domain.Comment;
 import avengers.nexus.user.entity.User;
 import jakarta.persistence.*;
