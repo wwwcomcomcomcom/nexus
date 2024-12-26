@@ -6,7 +6,6 @@ import avengers.nexus.post.repository.PostRepository;
 
 import avengers.nexus.post.repository.ReplyRepository;
 import avengers.nexus.user.entity.User;
-import avengers.nexus.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +17,8 @@ import java.util.List;
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final PostRepository postRepository;
-    private final UserService userService;
 
 
-    //댓글 작성
     @Transactional
     public void writeReply(String postId, ReplyDto replyDto, User author) {
         postRepository.findById(postId).orElseThrow(() ->
@@ -35,7 +32,7 @@ public class ReplyService {
                 .build();
         replyRepository.save(reply);
     }
-    //특정 게시글에 해당하는 전체 댓글 불러오기
+
     @Transactional(readOnly = true)
     public List<ReplyDto> getReplies(String postId) {
         List<Reply> replies = replyRepository.findAllByPostId(postId);
@@ -43,7 +40,7 @@ public class ReplyService {
         replies.forEach(reply -> repliesDto.add(ReplyDto.toDto(reply)));
         return repliesDto;
     }
-    //댓글 삭제
+
     @Transactional
     public void deleteReply(String postId, String replyId, User currentUser) {
         Reply reply = replyRepository.findById(replyId).orElseThrow(()->
@@ -54,11 +51,12 @@ public class ReplyService {
             throw new IllegalArgumentException("해당 게시글에 속한 댓글이 아닙니다.");
         }
 
-        if(!reply.getAuthor().equals(currentUser.getId())) {
+        if(!reply.getAuthor().equals(currentUser)) {
             throw new SecurityException("삭제 권한이 없습니다.");
         }
         replyRepository.delete(reply);
     }
+
     //댓글 수정
 //    @Transactional
 //    public ReplyDto updateReply(String postId, String replyId, ReplyDto replyDto, User user) {

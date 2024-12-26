@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RequiredArgsConstructor
-@RequestMapping("/api/posts/{postId}/replies")
+@RequestMapping("/post/{postId}/replies")
 @RestController
 public class ReplyController {
     private final ReplyService replyService;
