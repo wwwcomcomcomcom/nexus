@@ -2,11 +2,8 @@ package avengers.nexus.post.service;
 
 import avengers.nexus.post.domain.Comment;
 import avengers.nexus.post.domain.Post;
-import avengers.nexus.post.domain.Reply;
 import avengers.nexus.post.dto.CommentDto;
 import avengers.nexus.post.dto.CommentSummaryDto;
-import avengers.nexus.post.dto.CreateCommentDto;
-import avengers.nexus.post.dto.ReplyDto;
 import avengers.nexus.post.repository.CommentRepository;
 import avengers.nexus.post.repository.PostRepository;
 import avengers.nexus.user.entity.User;
@@ -31,7 +28,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void createComment(String postId, CreateCommentDto commentDto, User author) {
+    public void createComment(String postId, CommentDto commentDto, User author) {
         postRepository.findById(postId).orElseThrow(() ->
                 new IllegalArgumentException("게시글을 찾을 수 없습니다.")
         );

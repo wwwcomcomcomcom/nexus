@@ -1,10 +1,10 @@
 package avengers.nexus.post.controller;
 
 import avengers.nexus.auth.jwt.JWTUtil;
+import avengers.nexus.post.dto.CommentDto;
 import avengers.nexus.post.dto.CommentSummaryDto;
 import avengers.nexus.post.service.CommentService;
 import avengers.nexus.post.domain.Comment;
-import avengers.nexus.post.dto.CreateCommentDto;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +50,7 @@ public class CommentController {
     @Operation(summary = "댓글 작성", description = "해당 게시글에 댓글을 작성합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createComment(@PathVariable String postId, @RequestBody CreateCommentDto commentDto, HttpServletRequest request) {
+    public void createComment(@PathVariable String postId, @RequestBody CommentDto commentDto, HttpServletRequest request) {
         User user = getCurrentUser(request);
         commentService.createComment(postId, commentDto, user);
     }
@@ -62,7 +62,7 @@ public class CommentController {
     public void deleteComment(@PathVariable String postId, @PathVariable String commentId, HttpServletRequest request) {
         User user = getCurrentUser(request);
         Comment comment = commentService.getCommentById(postId, commentId);
-        if (!comment.getAuthor().equals(user.getId())) {
+        if (!comment.getAuthor().equals(user)) {
             throw new RuntimeException("삭제 권한이 없습니다.");
         }
         commentService.deleteComment(postId, commentId);
