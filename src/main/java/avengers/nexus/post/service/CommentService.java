@@ -2,11 +2,17 @@ package avengers.nexus.post.service;
 
 import avengers.nexus.post.domain.Comment;
 import avengers.nexus.post.domain.Post;
+import avengers.nexus.post.domain.Reply;
+import avengers.nexus.post.dto.CommentDto;
 import avengers.nexus.post.dto.CommentSummaryDto;
 import avengers.nexus.post.dto.CreateCommentDto;
+import avengers.nexus.post.dto.ReplyDto;
+import avengers.nexus.post.repository.CommentRepository;
 import avengers.nexus.post.repository.PostRepository;
+import avengers.nexus.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +21,7 @@ import java.util.List;
 public class CommentService {
     private final PostService postService;
     private final PostRepository postRepository;
-    private final PostRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     public CommentSummaryDto getCommentSummary(String postId) {
         Post post = postRepository.getPostById(postId);
@@ -24,16 +30,17 @@ public class CommentService {
         return new CommentSummaryDto(commentCount, replyCount);
     }
 
-    public Comment createComment(String postId, CreateCommentDto comment) {
-        Post post = postRepository.getPostById(postId);
-        Comment newComment = new Comment(
-                comment.getContent(),
-                comment.getAuthor()
+    @Transactional
+    public void createComment(String postId, CreateCommentDto commentDto, User author) {
+        postRepository.findById(postId).orElseThrow(() ->
+                new IllegalArgumentException("게시글을 찾을 수 없습니다.")
         );
-        post.addComment(newComment);
-        postService.savePost(post);
-        return newComment;
+
+        Comment comment = new Comment(postId, commentDto.getContent(), author);
+
+        commentRepository.save(comment);
     }
+
     public void deleteComment(String postId, String commentId) {
         Post post = postRepository.getPostById(postId);
         post.deleteComment(commentId);

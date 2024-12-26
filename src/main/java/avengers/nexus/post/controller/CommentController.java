@@ -50,9 +50,9 @@ public class CommentController {
     @Operation(summary = "댓글 작성", description = "해당 게시글에 댓글을 작성합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Comment createComment(@PathVariable String postId, @RequestBody CreateCommentDto commentDto, HttpServletRequest request) {
+    public void createComment(@PathVariable String postId, @RequestBody CreateCommentDto commentDto, HttpServletRequest request) {
         User user = getCurrentUser(request);
-        return commentService.createComment(postId, commentDto);
+        commentService.createComment(postId, commentDto, user);
     }
 
 

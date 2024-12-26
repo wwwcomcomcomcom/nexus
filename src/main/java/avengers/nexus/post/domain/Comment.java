@@ -1,6 +1,7 @@
 package avengers.nexus.post.domain;
 
 import avengers.nexus.Timestamped;
+import avengers.nexus.user.entity.User;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,15 +17,16 @@ public class Comment extends Timestamped {
     @Id
     private String id;
     private String content;
-    private Long author;
+    private User author;
     private List<Reply> replies;
-    public Comment(String content, Long author){
+    public Comment(String id, String content, User author){
+        this.id = id;
         this.content = content;
         this.author = author;
         this.replies = new ArrayList<>();
     }
 
-    public void updateComment(String content, Long author){
+    public void updateComment(String content, User author){
         this.content = content;
         this.author = author;
         this.replies = new ArrayList<>();

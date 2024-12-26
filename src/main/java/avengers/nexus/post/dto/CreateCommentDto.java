@@ -1,6 +1,7 @@
 package avengers.nexus.post.dto;
 
 import avengers.nexus.post.domain.Comment;
+import avengers.nexus.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Builder
 public class CreateCommentDto {
     private String content;
-    private Long author;
+    private User author;
     private String id;
 
     public static CreateCommentDto toDto(Comment comment) {
