@@ -29,7 +29,6 @@ public class PostController {
 
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
-    private final PostRepository postRepository;
 
     private User getCurrentUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
