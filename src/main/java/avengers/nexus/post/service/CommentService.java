@@ -44,7 +44,16 @@ public class CommentService {
         postService.savePost(post);
     }
     public List<Comment> getComments(String postId) {
-        List<Comment> comments = postRepository.getPostById(postId).getComments();
+        Post post = postRepository.getPostById(postId);
+        if (post == null) {
+            throw new RuntimeException("게시글을 찾을 수 없습니다.");
+        }
+
+        List<Comment> comments = post.getComments();
+        if (comments == null) {
+            throw new RuntimeException("게시글에 달린 댓글을 찾을 수 없습니다.");
+        }
+
         return comments;
     }
     public Comment getCommentById(String postId, String commentId) {
@@ -52,6 +61,6 @@ public class CommentService {
         return post.getComments().stream()
                 .filter(comment -> comment.getId().equals(commentId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다."));
     }
 }
