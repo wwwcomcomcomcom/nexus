@@ -28,6 +28,13 @@ public class Project {
 
     private String state;
 
+    private int frontend;
+    private int backend;
+    private int android;
+    private int ios;
+    private int flutter;
+    private int ai;
+    private int design;
 
 //    private List<Wanted> wanted = List.of();
 

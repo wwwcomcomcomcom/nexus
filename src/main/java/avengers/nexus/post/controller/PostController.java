@@ -7,8 +7,8 @@ import avengers.nexus.user.entity.User;
 import avengers.nexus.user.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,8 +43,8 @@ public class PostController {
     @Operation(summary = "게시글 작성", description = "게시글을 작성함")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public PostDto writePost(@RequestBody PostDto postDto, HttpServletRequest request) {
-        User user = jwtUtil.getUserByReq(request);
+    public PostDto writePost(@RequestBody PostDto postDto, @RequestHeader("Authorization") String authHeader) {
+        User user = jwtUtil.getUserByAuthHeader(authHeader);
         return postService.writePost(postDto, user);
     }
 
@@ -62,8 +62,8 @@ public class PostController {
     @Operation(summary = "게시글 삭제", description = "게시글을 삭제함.")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public void deletePost(@PathVariable("id") String id, HttpServletRequest request) {
-        User user = jwtUtil.getUserByReq(request);
+    public void deletePost(@PathVariable("id") String id, @RequestHeader("Authorization") String authHeader) {
+        User user = jwtUtil.getUserByAuthHeader(authHeader);
         postService.delete(id);
     }
 

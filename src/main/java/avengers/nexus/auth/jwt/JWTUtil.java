@@ -3,7 +3,6 @@ package avengers.nexus.auth.jwt;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -52,10 +51,14 @@ public class JWTUtil {
                 .compact();
     }
 
-    public User getUserByReq(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").replace("Bearer ", "");
+    public User getUserByAuthHeader(String authHeader) {
+        try{
+        String token = (String) authHeader.replace("Bearer ", "");
         Long userId = getUserId(token);
         return userRepository.findById(userId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.UNAUTHORIZED,"사용자를 찾을 수 없습니다."));
+        }catch (NullPointerException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"토큰이 없습니다.");
+        }
     }
 }

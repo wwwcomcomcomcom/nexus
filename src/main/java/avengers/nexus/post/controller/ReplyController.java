@@ -7,9 +7,9 @@ import avengers.nexus.post.service.ReplyService;
 import avengers.nexus.user.entity.User;
 import avengers.nexus.user.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +27,8 @@ public class ReplyController {
     @Operation(summary = "대댓글 작성", description = "해당 게시글에 대댓글을 작성합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void writeReply(@PathVariable String postId, @RequestBody ReplyDto replyDto, HttpServletRequest request) {
-        User user = jwtUtil.getUserByReq(request);
+    public void writeReply(@PathVariable String postId, @RequestBody ReplyDto replyDto, @RequestHeader("Authorization") String authHeader) {
+        User user = jwtUtil.getUserByAuthHeader(authHeader);
         replyService.writeReply(postId, replyDto, user);
     }
 
@@ -42,8 +42,8 @@ public class ReplyController {
     @Operation(summary = "대댓글 삭제", description = "선택한 대댓글을 삭제합니다.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{replyId}")
-    public void deleteReply(@PathVariable String postId, @PathVariable String replyId, HttpServletRequest request) {
-        User user = jwtUtil.getUserByReq(request);
+    public void deleteReply(@PathVariable String postId, @PathVariable String replyId, @RequestHeader("Authorization") String authorizationHeader) {
+        User user = jwtUtil.getUserByAuthHeader(authorizationHeader);
         replyService.deleteReply(postId, replyId, user);
     }
 

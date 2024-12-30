@@ -17,8 +17,8 @@ import java.util.List;
 public class BookmarkDto {
     private String id;
 
-    private User userId;
-    private List<Post> postIds;
+    private Long userId;
+    private List<String> postIds;
 
     public static BookmarkDto toDto(Bookmark bookmark) {
         return BookmarkDto.builder()

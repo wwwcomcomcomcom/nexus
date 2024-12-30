@@ -1,21 +1,17 @@
 package avengers.nexus.project.controller;
 
+import avengers.nexus.auth.jwt.JWTUtil;
 import avengers.nexus.project.dto.CreateProjectDto;
-import avengers.nexus.project.dto.SubmitApplicationDto;
 import avengers.nexus.project.entity.Project;
 import avengers.nexus.project.service.ProjectService;
-import avengers.nexus.project.wanted.domain.Wanted;
 import avengers.nexus.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,12 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
-    private User getAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        if(user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in");
-        return user;
-    }
+    private final JWTUtil jwtUtil;
 
 
     @GetMapping("/{id}")
@@ -59,8 +50,8 @@ public class ProjectController {
     @PostMapping("/")
     @Operation(summary = "프로젝트 생성", description = "프로젝트를 생성합니다.")
     @Parameter(name = "project", description = "CreateProjectDto", required = true)
-    public ResponseEntity<?> createProject(@RequestBody CreateProjectDto project) {
-        User user = getAuthenticatedUser();
+    public ResponseEntity<?> createProject(@RequestBody CreateProjectDto project, @RequestHeader("Authorization") String authHeader) {
+        User user = jwtUtil.getUserByAuthHeader(authHeader);
         try {
             Project result = projectService.createProject(project,user);
             return ResponseEntity.ok(result);
@@ -73,14 +64,14 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     @Operation(summary = "프로젝트 삭제", description = "프로젝트를 삭제합니다.")
     @Parameter(name = "id", description = "프로젝트 ID", required = true)
-    public void deleteProject(@PathVariable String id) {
-        User user = getAuthenticatedUser();
+    public void deleteProject(@PathVariable String id,@RequestHeader("Authorization") String authHeader) {
+        User user = jwtUtil.getUserByAuthHeader(authHeader);
         projectService.deleteProject(id, user);
     }
 
     @PostMapping("/{projectId}/member")
-    public ResponseEntity<?> addMember(@PathVariable String projectId, @RequestBody Long memberId) {
-        User user = getAuthenticatedUser();
+    public ResponseEntity<?> addMember(@PathVariable String projectId, @RequestBody Long memberId,@RequestHeader("Authorization") String authHeader) {
+        User user = jwtUtil.getUserByAuthHeader(authHeader);
         Project project = projectService.getProject(projectId);
         if(!project.getOwner().equals(user.getId())) {
             return ResponseEntity.badRequest().body("Only owner can add member!");

@@ -48,6 +48,15 @@ public class ProjectService {
                         .owner(user.getId())
                         .githubUrl(projectDto.getGithubUrl())
                         .state("모집중")
+
+                .frontend(projectDto.getFrontend())
+                .backend(projectDto.getBackend())
+                .android(projectDto.getAndroid())
+                .ios(projectDto.getIos())
+                .flutter(projectDto.getFlutter())
+                .ai(projectDto.getAi())
+                .design(projectDto.getDesign())
+
                         .build();
         projectRepository.save(project);
         return project;
