@@ -43,7 +43,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             CustomUserDetails userDetails = new CustomUserDetails(user);
             Authentication authToken = new UsernamePasswordAuthenticationToken(user, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authToken);
-        }finally {
+        } catch (ResponseStatusException e){
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getReason());
+        }
+        finally {
             filterChain.doFilter(request,response);
         }
     }

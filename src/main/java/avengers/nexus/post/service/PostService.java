@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
@@ -44,7 +44,7 @@ public class PostService {
         Post post = Post.builder()
                 .title(postDto.getTitle())
                 .content(postDto.getContents())
-                .author(user)
+                .author(user.getId())
                 .build();
 
         postRepository.save(post);

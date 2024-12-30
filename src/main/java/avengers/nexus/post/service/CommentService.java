@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class CommentService {
     private final PostService postService;

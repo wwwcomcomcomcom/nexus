@@ -17,6 +17,6 @@ public class Bookmark {
     @Id
     private String id;
 
-    private User userId;
-    private List<Post> postIds;
+    private Long userId;
+    private List<String> postIds;
 }

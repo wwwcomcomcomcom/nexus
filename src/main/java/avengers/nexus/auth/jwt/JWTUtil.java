@@ -1,8 +1,13 @@
 package avengers.nexus.auth.jwt;
 
+import avengers.nexus.user.entity.User;
+import avengers.nexus.user.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,9 +18,11 @@ import java.util.Date;
 public class JWTUtil {
 
     private final SecretKey secretKey;
+    private final UserRepository userRepository;
 
-    public JWTUtil(@Value("${jwt.secret}")String secret) {
+    public JWTUtil(@Value("${jwt.secret}")String secret, UserRepository userRepository) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
+        this.userRepository = userRepository;
     }
 
     public String getUsername(String token) {
@@ -23,7 +30,11 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
     }
     public Long getUserId(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", Long.class);
+        try{
+            return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", Long.class);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"토큰이 유효하지 않습니다. " + e.getMessage());
+        }
     }
 
     public Boolean isExpired(String token) {
@@ -39,5 +50,12 @@ public class JWTUtil {
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
                 .compact();
+    }
+
+    public User getUserByReq(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        Long userId = getUserId(token);
+        return userRepository.findById(userId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.UNAUTHORIZED,"사용자를 찾을 수 없습니다."));
     }
 }

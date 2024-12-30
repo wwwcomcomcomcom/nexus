@@ -18,7 +18,7 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private User author;
+    private Long author;
     private Long likes;
     private List<Long> likedBy; // 좋아요 누른 사용자 리스트
     private List<Comment> comments;
@@ -31,6 +31,12 @@ public class Post {
     }
     public void deleteComment(String commentId) {
         this.comments.removeIf(comment -> comment.getId().equals(commentId));
+    }
+    public Comment getComment(String commentId) {
+        return this.comments.stream()
+                .filter(comment -> comment.getId().equals(commentId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
     }
     public void addLike(User user) {
         Long id = user.getId();

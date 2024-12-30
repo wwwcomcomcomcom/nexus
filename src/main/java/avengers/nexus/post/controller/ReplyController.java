@@ -17,29 +17,18 @@ import java.util.List;
 
 
 @RequiredArgsConstructor
-@RequestMapping("/post/{postId}/replies")
-@RestController
+@RequestMapping("/post/{postId}/reply")
+//@RestController
 public class ReplyController {
     private final ReplyService replyService;
     private final UserRepository userRepository;
     private final JWTUtil jwtUtil;
 
-    private User getCurrentUser(HttpServletRequest request) {
-        Long userId = getUserIdFromToken(request);
-        return userRepository.findById(userId).orElseThrow(()->
-                new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-    }
-
-    private Long getUserIdFromToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").replace("Bearer ", "");
-        return jwtUtil.getUserId(token);
-    }
-
     @Operation(summary = "대댓글 작성", description = "해당 게시글에 대댓글을 작성합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void writeReply(@PathVariable String postId, @RequestBody ReplyDto replyDto, HttpServletRequest request) {
-        User user = getCurrentUser(request);
+        User user = jwtUtil.getUserByReq(request);
         replyService.writeReply(postId, replyDto, user);
     }
 
@@ -54,7 +43,7 @@ public class ReplyController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{replyId}")
     public void deleteReply(@PathVariable String postId, @PathVariable String replyId, HttpServletRequest request) {
-        User user = getCurrentUser(request);
+        User user = jwtUtil.getUserByReq(request);
         replyService.deleteReply(postId, replyId, user);
     }
 

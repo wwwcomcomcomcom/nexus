@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+//@Repository
 public interface ReplyRepository extends MongoRepository<Reply, String> {
     List<Reply> findAllByPostId(String postId);
 }
